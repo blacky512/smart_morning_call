@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="패키지 &apos;voice.t&apos;을(를) &apos;voice.tUDP&apos;(으)로 이름 바꾸기&#x0D;&#x0A;- 원래 프로젝트: &apos;voicetestUDP&apos;&#x0D;&#x0A;- 원래 요소: &apos;voicetestUDP/src/voice.t&apos;&#x0D;&#x0A;- 이름을 바꾼 요소: &apos;voicetestUDP/src/voice.tUDP&apos;&#x0D;&#x0A;- 리팩토링된 요소에 대한 참조 갱신&#x0D;&#x0A;- 주석 및 문자열에서 텍스트 발생 갱신" description="&apos;voice.t&apos; 패키지의 이름을 바꿉니다." flags="589830" hierarchical="false" id="org.eclipse.jdt.ui.rename.package" input="/src&lt;voice.t" name="voice.tUDP" qualified="false" references="true" stamp="1360435525786" textual="false" version="1.0"/>
+</session>

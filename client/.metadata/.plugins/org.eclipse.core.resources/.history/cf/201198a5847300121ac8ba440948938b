@@ -1,0 +1,66 @@
+package voice.tUDP;
+
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+
+
+import android.media.AudioRecord;
+import android.util.Log;
+
+/**
+ * 녹음 및 전송을 수행
+ * @author kyobum
+ *
+ */
+public class Sender extends Thread{
+	//public BufferedOutputStream		bos;
+	public AudioRecord				audioRecord;
+	public int 						bufferSize;
+	public byte[]					buffer;
+	
+	public DatagramPacket			connPacket;
+	/*
+	public Sender(BufferedOutputStream bos,AudioRecord audioRecord,	int bufferSize){
+		this.bos			= bos;
+		this.audioRecord	= audioRecord;
+		this.bufferSize		= bufferSize;
+		this.buffer			= new byte[bufferSize];
+	}
+	*/
+	
+	public Sender(DatagramPacket connPacket, AudioRecord audioRecord, int bufferSize){
+		//this.bos			= bos;
+		this.audioRecord	= audioRecord;
+		this.bufferSize		= bufferSize;
+		this.buffer			= new byte[bufferSize];
+		
+		this.connPacket		= connPacket;
+		
+	}
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		super.run();
+		
+		DatagramSocket client	= new DatagramSocket();
+		
+		audioRecord.startRecording();
+		while (true) {
+			int bufferReadResult = audioRecord.read(buffer, 0, bufferSize);
+			for (int i = 0; i < bufferReadResult; i++)
+				try {
+					bos.write(buffer[i]);
+					//Log.i("CHECK","보냈음");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		}
+		
+	}
+	
+	
+
+}
