@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import org.apache.http.impl.conn.tsccm.WaitingThread;
+
 import android.media.AudioRecord;
 import android.media.AudioTrack;
 import android.os.Handler;
@@ -29,16 +31,12 @@ public class Srv extends Thread{
 	public int			bufferSize;
 	
 	public DatagramSocket	server		= null;
-	public DatagramSocket	client		= null;
+	//public DatagramSocket	client		= null;
 	public DatagramPacket	connPacket	= null;
-	//public Socket 			client		= null;
-	
+		
 	public Receiver		receiver	= null;
 	public Sender		sender		= null;
-	
-	public BufferedInputStream		bis;
-	public BufferedOutputStream		bos;
-	
+		
 	public Handler		mainHandler	= null;
 	
 	
@@ -53,6 +51,7 @@ public class Srv extends Thread{
 		this.mainHandler	= mainHandler;
 		
 		this.buffer			= new byte[bufferSize];
+		this.connPacket		= new DatagramPacket(buffer, bufferSize);
 	}
 	
 	@Override
@@ -60,9 +59,11 @@ public class Srv extends Thread{
 		// TODO Auto-generated method stub
 		super.run();
 		
+		
+		
 		try {
 			server = new DatagramSocket(Addr.port);
-			client = new DatagramSocket();
+			//client = new DatagramSocket();
 			sendMsgToMainActivity("서버 생성 성공");
 						
 		} catch (IOException e) {
@@ -70,39 +71,39 @@ public class Srv extends Thread{
 			e.printStackTrace();
 		}
 		
-		acceptClient();	// 클라이언트를 받도록
-		/*
-		while(true){
-			
-		}
-		*/
+		chat();
 	}
 	
-	private void acceptClient(){
-		try {
-			connPacket = new DatagramPacket(buffer, bufferSize);
-			server.receive(connPacket);
-			
-			//sendMsgToMainActivity("클라이언트 Accept :"+connPacket.getAddress());
-			//Log.i("IP", connPacket.getAddress().toString());
-			
-			sendMsgToMainActivity(connPacket.getAddress().toString());
-					
-			// Sender, Receiver 실행
-			sender		= new Sender(connPacket, client, audioRecord, bufferSize);
-			sender		.setDaemon(false);
-			sender		.start();
-			
-			receiver	= new Receiver(connPacket, server, audioTrack, bufferSize);
-			receiver	.setDaemon(false);
-			receiver	.start();
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private void chat(){
+		
+		boolean	conn = false;
+		
+		while(!conn){
+			try {
+				server.receive(connPacket);
+				conn = true;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		receiver	= new Receiver(server, audioTrack, bufferSize);
+		receiver	.setDaemon(true);
+		receiver	.start();				
+				
+		sender		= new Sender(connPacket.getAddress(), audioRecord, bufferSize);
+		sender		.setDaemon(true);
+		sender		.start();
+		
+		
+		while( (Thread.State.TERMINATED != receiver.getState()) &&
+				(Thread.State.TERMINATED != sender.getState())){
+			
+		}
+		
 	}
+	
 	
 	private void sendMsgToMainActivity(String msg){
 		Message retmsg = Message.obtain(mainHandler, 0, msg);	

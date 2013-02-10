@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -24,16 +25,12 @@ public class Cli extends Thread {
 	public AudioTrack	audioTrack;
 	public AudioRecord	audioRecord;	
 	public int			bufferSize;
-		 
-	//public Socket 		client	= null;
+		
 	public DatagramSocket	client	= null;
 	public DatagramPacket	connPacket	= null;
 	
 	public Receiver		receiver	= null;
 	public Sender		sender		= null;
-	
-	public BufferedInputStream		bis;
-	public BufferedOutputStream		bos;
 	
 	public byte[] buffer = null;
 	
@@ -50,29 +47,30 @@ public class Cli extends Thread {
 		// TODO Auto-generated method stub
 		super.run();
 		
+		InetSocketAddress isa = new InetSocketAddress(Addr.host, Addr.port);
+		
 		try {
-			InetSocketAddress isa = new InetSocketAddress(Addr.host, Addr.port);
-			
-			client		= new DatagramSocket();
-			connPacket	= new DatagramPacket(buffer, bufferSize, isa.getAddress(), isa.getPort());
-
-			//@@@ 재시도하도록 수정해야함
-			
-			//bis	= new BufferedInputStream(client.getInputStream());
-			//bos = new BufferedOutputStream(client.getOutputStream());
-			
+	
 			// Sender, Receiver 실행
-			sender		= new Sender(connPacket, client, audioRecord, bufferSize);
+			sender		= new Sender(isa.getAddress(), audioRecord, bufferSize);
 			sender		.setDaemon(false);
 			sender		.start();
 			
-			receiver	= new Receiver(null, client, audioTrack, bufferSize);
+			
+			client		= new DatagramSocket(Addr.port);
+			
+			receiver	= new Receiver(client, audioTrack, bufferSize);
 			receiver	.setDaemon(false);
 			receiver	.start();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		while( (Thread.State.TERMINATED != receiver.getState()) &&
+				(Thread.State.TERMINATED != sender.getState())){
+			
 		}
 	}
 }

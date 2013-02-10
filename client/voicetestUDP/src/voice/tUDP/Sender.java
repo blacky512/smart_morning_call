@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
 
 
@@ -16,31 +17,23 @@ import android.util.Log;
  *
  */
 public class Sender extends Thread{
-	//public BufferedOutputStream		bos;
 	public AudioRecord				audioRecord;
 	public int 						bufferSize;
 	public byte[]					buffer;
 	
-	public DatagramPacket			connPacket;
+	public DatagramPacket			packet;	
+	public DatagramSocket			socket;
 	
-	public DatagramSocket			dSocket;
-	/*
-	public Sender(BufferedOutputStream bos,AudioRecord audioRecord,	int bufferSize){
-		this.bos			= bos;
-		this.audioRecord	= audioRecord;
-		this.bufferSize		= bufferSize;
-		this.buffer			= new byte[bufferSize];
-	}
-	*/
+	public InetAddress				addr;
 	
-	public Sender(DatagramPacket connPacket, DatagramSocket dSocket, AudioRecord audioRecord, int bufferSize){
+	
+	public Sender(InetAddress addr, AudioRecord audioRecord, int bufferSize){
 		//this.bos			= bos;
+		
+		this.addr			= addr;
 		this.audioRecord	= audioRecord;
 		this.bufferSize		= bufferSize;
 		this.buffer			= new byte[bufferSize];
-		
-		this.connPacket		= connPacket;
-		this.dSocket		= dSocket;
 		
 	}
 	@Override
@@ -48,46 +41,38 @@ public class Sender extends Thread{
 		// TODO Auto-generated method stub
 		super.run();
 		
-		DatagramPacket	sdPacket	= null;
-		
-		
-		audioRecord.startRecording();
-		
-		if(connPacket.getAddress().toString() == "/"+Addr.host){ // 클라이언트인 경우
-			audioRecord.read(buffer, 0, bufferSize);
-			sdPacket = new DatagramPacket(buffer, bufferSize, connPacket.getAddress(), connPacket.getPort());
-			try {
-				dSocket.send(sdPacket);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}		
-		
+		try {
+			socket			= new DatagramSocket();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
-		try {
-			dSocket = new DatagramSocket();
+		audioRecord.startRecording();		
+		
+		while (true) {			
+			int bufferReadResult = audioRecord.read(buffer, 0, bufferSize);
 			
-			while (true) {			
-				audioRecord.read(buffer, 0, bufferSize);
-				sdPacket = new DatagramPacket(buffer, bufferSize, connPacket.getAddress(), connPacket.getPort());
-				
-				Log.i("CHECK", connPacket.getAddress()+":"+connPacket.getPort()+"..send");
+			int i = 0;
+			for(; i<bufferReadResult; i+=bufferReadResult/8){
+				packet = new DatagramPacket(buffer, i, bufferReadResult/8, addr, Addr.port);				
 				
 				try {
-					dSocket.send(sdPacket);
+					socket.send(packet);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-		} catch (SocketException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			}			
+			
+			try {
+				socket.send(packet);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+			
 		}
-		
-		
-		
 		
 	}
 	
