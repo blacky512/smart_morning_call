@@ -2,13 +2,13 @@
 	session_start();
 	include "./connect.php";
 
-	$temp=json_decode(urldecode($data));
+	$temp=json_decode(urldecode($_REQUEST['data']));
 	$id=$temp['id'];
 	$pw=$temp['pw'];
 
 	$response = array();
 
-	if(!$id){
+/*	if(!$id){
 		$response['result'] = 'false';
 		$response['message'] = '아이디를 입력하세요';
 		echo json_encode($response);
@@ -21,7 +21,7 @@
 		echo json_encode($response);
 			exit;
 	}
-
+*/
 	$sql = "select * from random_db where id='".$id."'";
 	$result=mysql_query($sql);
 	$num_match=mysql_num_rows($result);
