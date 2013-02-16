@@ -2,14 +2,19 @@
 	session_start();
 	include "./connect.php";
 
-/*	$temp=json_decode(urldecode($_REQUEST['data']));
+
+	$temp = $_POST;
+//	$temp = json_decode(file_get_contents('php://input'));
+
 	$id=$temp['id'];
 	$pw=$temp['pw'];
-*/
 
-	$id=$_REQUEST['id'];
-	$pw=$_REQUEST['pw'];
-	
+//	echo($temp);
+
+
+//	$id=$_REQUEST['id'];
+//	$pw=$_REQUEST['pw'];
+
 	$response = array();
 
 	if(!$id){

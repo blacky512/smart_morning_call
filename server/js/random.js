@@ -1,15 +1,30 @@
 $(document).ready(function(){
+	var request_data = {};
+
 	$("#modify_btn").click(function(){
 		window.location.href='./modify.html';
 	});
-
+		
 	$("#logout_btn").click(function(){
 		$.ajax({
-
-			// ajax로 logout 페이지 이동
+			type:"POST",
+			dataType:"json",
+			url:"./php/logout.php",
+			success: function(result){
+				console.log(result);
+				alert(result.message);
+				window.location='./index.html';
+			},	// end of success
+			error: function(request, status, error){
+				alert("random.js; 서버 통신 ajax 에러");
+				console.log(request.status);
+				console.log(request.responseText);
+				console.log(status);
+				console.log(error);
+			}	// end of error
 
 		}); 	// end of ajax
-	});		// end of logout
+	});		// end of click
 
 	$("#random_btn").click(function(){
 		window.location.href="./random.html";
@@ -19,8 +34,62 @@ $(document).ready(function(){
 		window.location.href="./friends.html";
 	});
 
-	$("#random_set_btn").click(function (){
-		// 알람 세팅 이후 동작 세팅 
 
+	// 알람정보 다시 세팅한다.	
+	$("#random_set_btn").click(function (){
+		request_data['is_update']='true';
+
+		request_data['hour']=$("#hour").val();
+		request_data['minute']=$("#minute").val();
+
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			data: request_data,
+			url:"./php/random_set.php",
+			success:function(result){
+				console.log(result);
+				alert(result.message);
+			},	// end of success
+			error: function(request, status, error){
+				alert("알람 세팅 버튼 관련 random.js; 서버 통신 ajax 에러");
+				console.log(request.status);
+				console.log(request.responseText);
+				console.log(status);
+				console.log(error);
+			}	// end of error
+		});	// end of ajax
 	});
-})
+
+
+	// 기존에 있던 알람 정보를 받아온다.
+
+	request_data['is_update']= 'false';
+
+	$.ajax({
+		type:"POST",
+		dataType:"JSON",
+		data: request_data,
+		url: "./php/random_set.php",
+		success: function(result){
+			console.log(result);
+			if(result.result=="true"){
+				$("#hour").val(parseInt(result.hour, 10));
+				$("#minute").val(parseInt(result.minute, 10));
+				alert(result.message);
+
+			}
+			else{
+				alert(result.message);
+			}
+		}, 	// end of success
+		error: function(request, status, error){
+			alert("기존 알람 정보 업데이트 관련 random.js; 서버 통신 ajax 에러");
+			console.log(request.status);
+			console.log(request.responseText);
+			console.log(status);
+			console.log(error);
+		}	// end of error	
+	});	// end of ajax
+
+});

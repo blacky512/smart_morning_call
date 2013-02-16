@@ -1,3 +1,6 @@
+<?php
+	session_start();
+?>
 
 <html>
 	<head>
@@ -16,7 +19,7 @@
 			<tr>
 				<td>&nbsp; &nbsp; ID </td>
 				<td>
-					<input type="text", id="id", name="id", value="<?=$id?>">
+					<input type="text", id="id", name="id", value="<?=$_SESSION['id']?>">
 				</td>
 			</tr>
 			<tr>
@@ -34,8 +37,9 @@
 			<tr>
 				<td>&nbsp; &nbsp; sex </td>
 				<td>
-					<input type="radio", class="sex", name="sex", value="0"> female
-					<input type="radio", class="sex", name="sex", value="1"> male
+
+					<input type='radio', class='sex', name='sex', value='0'> female
+					<input type='radio', class='sex', name='sex', value='1'> male
 				</td>
 			</tr>
 			<tr>
@@ -43,17 +47,17 @@
 				<td>
 					<select id="age", name="age">
 						<option value="" checked>나이</option>
-						<option value="1" checked>10대</option>
-						<option value="2" checked>20대</option>
-						<option value="3" checked>30대</option>
-						<option value="4" checked>40대~</option>
+						<option value="1">10대</option>
+						<option value="2">20대</option>
+						<option value="3">30대</option>
+						<option value="4">40대~</option>
 					</select>
 				</td>
 			</tr>
 
 			<tr>
 				<td align="right">
-					<input type="button", id="join_btn2", value="join">
+					<input type="button", id="modify_btn", value="Modify">
 				</td>
 			</tr>
 		</table>

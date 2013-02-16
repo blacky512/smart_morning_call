@@ -2,15 +2,16 @@
 	header("Content-Type: text/html; charset=UTF-8");
 	session_start();
 	include "./connect.php";
-	
+
 	$temp = $_REQUEST;
-	//print_r($temp);
+//	$temp = json_decode(file_get_contents('php://input'));
 
 	$id=$temp['id'];
 	$pw=$temp['pw'];
 	$pw2=$temp['pw2'];
 	$sex=$temp['sex'];
 	$age=$temp['age'];
+
 
 
 	$acc=0;
