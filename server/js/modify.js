@@ -29,7 +29,7 @@ $(document).ready(function(){
 		}	// end of error
 	});	// end of ajax
 
-	$('#modify_btn').click(function(){
+	$('#modify_btn2').click(function(){
 		var val = {};
 
 		val['pw']=$("#pw").val();

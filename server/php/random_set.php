@@ -4,12 +4,10 @@
 
 /*	$temp = json_decode(file_get_contents("php://input"), true);
 	print_r($temp);
-
-	$hour=$temp['hour'];
-	$minute=$temp['minute'];
 */
+	$temp= $_POST;
 
-	$is_update= $_POST['is_update'];
+	$is_update= $temp['is_update'];
 	$id =$_SESSION['id'];
 
 	if($is_update=="false"){
@@ -45,14 +43,8 @@
 
 	else if($is_update=="true"){
 
-	/*	$temp = json_decode(file_get_contents("php://input"), true);
-	//	print_r($temp);
 		$hour=$temp['hour'];
 		$minute=$temp['minute'];
-	*/
-		$temp= $_POST;
-		$hour=$_POST['hour'];
-		$minute=$_POST['minute'];
 
 		if($hour<10){
 			$hour='0'.$hour;

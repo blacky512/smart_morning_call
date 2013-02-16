@@ -1,19 +1,12 @@
 <?php
 	session_start();
 	include "./connect.php";
-
-
-	$temp = $_POST;
+	
 //	$temp = json_decode(file_get_contents('php://input'));
+	$temp = $_POST;
 
 	$id=$temp['id'];
 	$pw=$temp['pw'];
-
-//	echo($temp);
-
-
-//	$id=$_REQUEST['id'];
-//	$pw=$_REQUEST['pw'];
 
 	$response = array();
 

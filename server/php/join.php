@@ -12,8 +12,6 @@
 	$sex=$temp['sex'];
 	$age=$temp['age'];
 
-
-
 	$acc=0;
 	$rank=1;
 	$point=0;

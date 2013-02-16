@@ -3,9 +3,10 @@
 	session_start();
 	include "./connect.php";
 
-	$temp=$_POST;	
 //	$temp = json_decode(file_get_contents("php://input"), true);
 		//print_r($temp);
+
+	$temp=$_POST;	
 
 	$id =$_SESSION['id'];
 	$pw=$temp['pw'];

@@ -13,5 +13,6 @@
 
 	$response['ressult']='true';
 	$response['message']='로그아웃 성공';
+	
 	echo json_encode($response);
 ?>
