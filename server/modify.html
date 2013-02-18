@@ -1,0 +1,65 @@
+<?php
+	session_start();
+?>
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title> Join.html </title>
+<!--		<link href="./style.css" rel="stylesheet" type="text/css"/>
+-->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript", src="./js/modify.js"></script>
+	</head>	
+	<body>
+
+		<font face='comic sans MS'>		
+		<h1> Modify.html </h1>
+		<table>
+			<tr>
+				<td>&nbsp; &nbsp; ID </td>
+				<td>
+					<input type="text", id="id", name="id", value="<?=$_SESSION['id']?>">
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp; &nbsp; pw </td>
+				<td>
+					<input type="password", id="pw", name="pw">
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp; &nbsp; pw confirm</td>
+				<td>
+					<input type="password", id="pw2",name="pw2">
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp; &nbsp; sex </td>
+				<td>
+
+					<input type='radio', class='sex', name='sex', value='0'> female
+					<input type='radio', class='sex', name='sex', value='1'> male
+				</td>
+			</tr>
+			<tr>
+				<td>&nbsp; &nbsp; age </td>
+				<td>
+					<select id="age", name="age">
+						<option value="" checked>나이</option>
+						<option value="1">10대</option>
+						<option value="2">20대</option>
+						<option value="3">30대</option>
+						<option value="4">40대~</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<td align="right">
+					<input type="button", id="modify_btn2", value="Modify">
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
