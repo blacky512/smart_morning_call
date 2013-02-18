@@ -42,7 +42,9 @@
 
 	$response['result']='true';
 	$response['message']='회원 정보 수정 성공';
-
+	$response['server_ip_address']= $_SERVER['SERVER_ADDR']; 	// 현재의 스크립트가 실행되고 있는 서버의 IP address
+	$response['user_ip_address']=$_SERVER['REMOTE_ADDR'];	//현재 페이지를 보고 있는 사용자의 IP address
+	
 	echo json_encode($response);
 
 	mysql_close();

@@ -4,10 +4,7 @@
 
 //	$temp = json_decode(file_get_contents('php://input'));
 	$temp = $_POST;
-
-
 	$time=$temp['time'];
-
 
 	$f_sql = "select $id, $ip_public, $ip_private 
 			from random_db
