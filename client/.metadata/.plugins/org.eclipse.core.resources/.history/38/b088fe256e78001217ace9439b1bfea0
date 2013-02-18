@@ -1,0 +1,12 @@
+package whitepaper.smcall;
+
+import android.content.BroadcastReceiver;
+
+public class AReceiver extends BroadcastReceiver {
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+	    // TODO Auto-generated method stub
+	}
+
+}

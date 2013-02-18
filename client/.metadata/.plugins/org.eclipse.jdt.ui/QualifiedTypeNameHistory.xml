@@ -1,2 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy/>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="whitepaper.smcall.db.SmcallDB"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.LoginActivity"/>
+<fullyQualifiedTypeName name="android.database.Cursor"/>
+<fullyQualifiedTypeName name="android.os.Bundle"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.MainActivity"/>
+<fullyQualifiedTypeName name="android.support.v4.app.Fragment"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.fragment.FriendsCallFrg"/>
+<fullyQualifiedTypeName name="android.widget.TabHost.OnTabChangeListener"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.R"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.R.layout"/>
+<fullyQualifiedTypeName name="android.widget.Button"/>
+<fullyQualifiedTypeName name="android.view.View.OnClickListener"/>
+<fullyQualifiedTypeName name="android.widget.TextView"/>
+<fullyQualifiedTypeName name="android.app.Dialog"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.fragment.MorningCall"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.MorningCallActivity"/>
+<fullyQualifiedTypeName name="android.support.v4.app.DialogFragment"/>
+<fullyQualifiedTypeName name="android.app.TimePickerDialog"/>
+<fullyQualifiedTypeName name="android.app.TimePickerDialog.OnTimeSetListener"/>
+<fullyQualifiedTypeName name="android.support.v4.app.FragmentTransaction"/>
+<fullyQualifiedTypeName name="java.util.TooManyListenersException"/>
+<fullyQualifiedTypeName name="android.widget.ToggleButton"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.alarm.AlarmStructure"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.R.id"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.AlarmReceiverActivity"/>
+<fullyQualifiedTypeName name="android.app.PendingIntent"/>
+<fullyQualifiedTypeName name="android.app.AlarmManager"/>
+<fullyQualifiedTypeName name="android.os.PowerManager"/>
+<fullyQualifiedTypeName name="android.content.Context"/>
+<fullyQualifiedTypeName name="android.view.WindowManager"/>
+<fullyQualifiedTypeName name="android.content.Intent"/>
+<fullyQualifiedTypeName name="android.widget.Toast"/>
+<fullyQualifiedTypeName name="java.util.Calendar"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.remote.Jax"/>
+<fullyQualifiedTypeName name="android.os.Vibrator"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.remote.Mjpage"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.alarm.AlarmStr"/>
+<fullyQualifiedTypeName name="java.net.URL"/>
+<fullyQualifiedTypeName name="java.net.HttpURLConnection"/>
+<fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="java.net.MalformedURLException"/>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+<fullyQualifiedTypeName name="java.io.IOException"/>
+<fullyQualifiedTypeName name="java.lang.Runnable"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.remote.Utils"/>
+<fullyQualifiedTypeName name="android.util.Log"/>
+</qualifiedTypeNameHistroy>

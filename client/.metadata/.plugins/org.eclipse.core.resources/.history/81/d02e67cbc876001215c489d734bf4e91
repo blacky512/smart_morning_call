@@ -1,0 +1,13 @@
+package whitepaper.smcall.db;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+
+public class smcallDB {
+	private static final String DATABASE_NAME = "todolist.db";
+	private static final int DATABASE_VERSION = 1;
+	private SQLiteDatabase mDB;
+	private DatabaseHelper mDBHelper;
+	private Context mCtx;
+
+}

@@ -33,8 +33,14 @@ public class Sender extends Thread{
 		audioRecord.startRecording();
 		while (true) {
 			int bufferReadResult = audioRecord.read(buffer, 0, bufferSize);
+			try {
+				sleep(10);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			for (int i = 0; i < bufferReadResult; i++)
-				try {
+				try {					
 					bos.write(buffer[i]);
 					//Log.i("CHECK","보냈음");
 				} catch (IOException e) {

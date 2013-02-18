@@ -1,0 +1,26 @@
+package whitepaper.smcall.alarm;
+
+public class AlarmStructure {
+	
+	// 시간
+	public int			hour;
+	public int			time;
+	
+	// 반복설정
+	public boolean[]	repeat = new boolean[7];
+	
+	// 매치조건  //이성만, 시간범위
+	
+	// 모닝콜 알림 타입
+	public boolean		sound;
+	public int			volume;
+	public boolean		vibe;
+	
+	// 활성 유무
+	public boolean		alive;
+	
+	
+	public AlarmStructure(){
+		
+	}
+}

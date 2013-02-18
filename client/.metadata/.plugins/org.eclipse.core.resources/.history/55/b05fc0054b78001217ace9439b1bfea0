@@ -1,0 +1,5 @@
+package whitepaper.smcall.alarm;
+
+public class AlarmStructure {
+
+}

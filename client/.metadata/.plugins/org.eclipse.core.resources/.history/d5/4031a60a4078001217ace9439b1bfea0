@@ -1,0 +1,28 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RandomCallActivity" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="26dp"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/rcall_1"
+            android:layout_width="260dp"
+            android:layout_height="300dp"
+            >
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="260dp"
+            android:layout_height="80dp" >
+        </FrameLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

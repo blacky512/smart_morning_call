@@ -3,42 +3,16 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-	<RadioGroup 
-	    
-	    android:id="@+id/radioGroup1"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    >
-	    
-		<RadioButton
-        android:id="@+id/radioButton1"        
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Server" />
 
-    	<RadioButton
-        android:id="@+id/radioButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Client" />
-	    
-	</RadioGroup>
-    
     <EditText
         android:id="@+id/editText1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        android:hint="IP ADDRESS">
+        android:layout_height="wrap_content"
+         >
 
         <requestFocus />
     </EditText>
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="PORT NUM" />
-
     <Button
         android:id="@+id/button1"
         android:layout_width="160dp"

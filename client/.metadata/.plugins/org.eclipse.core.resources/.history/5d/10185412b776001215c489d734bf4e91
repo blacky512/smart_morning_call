@@ -1,0 +1,105 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f5f5"
+    tools:context=".MainActivity" >
+
+    <RelativeLayout
+        android:layout_width="260dp"
+        android:layout_height="360dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" >
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="bottom"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/titleFrame"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:background="#fffafa" >
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/texttitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"                
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:text="위에는 제목이 들어간다"
+                android:layout_below="@+id/titleFrame"/>
+
+            <LinearLayout
+                android:id="@+id/LinearLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/texttitle"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="70dp"
+                android:background="@drawable/te"
+                android:orientation="vertical"
+                android:paddingBottom="15dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="15dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <EditText
+                        android:id="@+id/editText1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="USER ID"
+                        android:textSize="14dp" >
+                    </EditText>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <EditText
+                        android:id="@+id/editText2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="PASSWORD"
+                        android:inputType="textPassword"
+                        android:textSize="14dp" >
+                    </EditText>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/button1"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/bn"
+                    android:padding="0dp"
+                    android:text="LOGIN"
+                    android:textColor="#a9a9a9"
+                    android:textSize="14dp"
+                    android:textStyle="normal"
+                    android:typeface="monospace" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

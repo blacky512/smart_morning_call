@@ -1,0 +1,5 @@
+package whitepaper.smcall.remote;
+
+public class Mjpage {
+	public final static String login = "http://211.189.127.30/server/login.php";
+}

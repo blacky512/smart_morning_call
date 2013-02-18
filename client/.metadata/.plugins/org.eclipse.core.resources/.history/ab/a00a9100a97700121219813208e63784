@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SmartMorningCall</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_morning_call">MorningCallActivity</string>
+    <string name="tab_randomcall">R_Call</string>
+    <string name="tab_friendscall">F_Call</string>
+
+</resources>

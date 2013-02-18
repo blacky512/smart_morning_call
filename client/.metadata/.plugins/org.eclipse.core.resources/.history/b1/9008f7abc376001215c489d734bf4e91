@@ -1,0 +1,140 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f5f5"
+    android:paddingTop="25dp"
+    tools:context=".MainActivity" >
+
+    <RelativeLayout
+        android:id="@+id/mainRL"
+        android:layout_width="260dp"
+        android:layout_height="360dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" >
+
+        <RelativeLayout
+            android:id="@+id/RelativeLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:gravity="bottom"
+            android:orientation="vertical" >
+
+            <FrameLayout
+                android:id="@+id/titleFrame"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:background="#fffafa" >
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/texttitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/titleFrame"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:text="위에는 제목이 들어간다" />
+
+            <RelativeLayout
+                android:id="@+id/RelativeLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/texttitle"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="90dp"
+                android:background="@drawable/te"
+                android:gravity="top"
+                android:orientation="vertical"
+                android:paddingBottom="15dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:paddingTop="15dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical" >
+
+                    <EditText
+                        android:id="@+id/etId"
+                        android:layout_width="match_parent"
+                        android:layout_height="14dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="ID"
+                        android:includeFontPadding="false"
+                        android:textSize="14dp" >
+
+                        <requestFocus />
+                    </EditText>
+
+                    <EditText
+                        android:id="@+id/etPw"
+                        android:layout_width="match_parent"
+                        android:layout_height="14dp"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:hint="PASSWORD"
+                        android:inputType="textPassword"
+                        android:textSize="14dp"
+                        android:typeface="monospace" />
+
+                    <Button
+                        android:id="@+id/btnLg"
+                        android:layout_width="match_parent"
+                        android:layout_height="7dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bn"
+                        android:padding="0dp"
+                        android:text="LOGIN"
+                        android:textColor="#a9a9a9"
+                        android:textSize="14dp"
+                        android:textStyle="normal"
+                        android:typeface="monospace" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/joinFrame"
+        android:layout_width="260dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/mainRL"
+        android:layout_centerHorizontal="true" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:text="가입하기 들어갈 곳"
+            android:textSize="13dp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/joinFrame"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="Copyright ⓒ 2013 by Whitepaper"
+        android:textColor="#c0c0c0"
+        android:textSize="11dp" />
+
+</RelativeLayout>

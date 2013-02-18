@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring accessors="true" comment="Delete 4 elements from project &apos;voicetestUDP&apos;&#x0D;&#x0A;- Original project: &apos;voicetestUDP&apos;&#x0D;&#x0A;- Original elements:&#x0D;&#x0A;     voice.tUDP.Cli.java&#x0D;&#x0A;     voice.tUDP.Receiver.java&#x0D;&#x0A;     voice.tUDP.Sender.java&#x0D;&#x0A;     voice.tUDP.Srv.java" description="Delete elements" element1="/src&lt;voice.tUDP{Sender.java" element2="/src&lt;voice.tUDP{Srv.java" element3="/src&lt;voice.tUDP{Receiver.java" element4="/src&lt;voice.tUDP{Cli.java" elements="4" flags="589830" id="org.eclipse.jdt.ui.delete" resources="0" stamp="1360921476766" subPackages="false" version="1.0"/>
+</session>
