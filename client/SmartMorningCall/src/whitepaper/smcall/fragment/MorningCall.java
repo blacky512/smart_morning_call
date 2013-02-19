@@ -5,6 +5,7 @@ import whitepaper.smcall.R.id;
 import whitepaper.smcall.R.layout;
 import whitepaper.smcall.R.string;
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,6 +27,9 @@ public class MorningCall extends Fragment implements OnTabChangeListener {
     private View mRoot;
     private TabHost mTabHost;
     private int mCurrentTab;
+    
+    private View leftTab;
+    private View rightTab;
  
     @Override
     public void onAttach(Activity activity) {
@@ -38,7 +42,14 @@ public class MorningCall extends Fragment implements OnTabChangeListener {
             Bundle savedInstanceState) {
         mRoot = inflater.inflate(R.layout.morningcall, null);
         mTabHost = (TabHost) mRoot.findViewById(android.R.id.tabhost);
-        setupTabs();   
+        setupTabs();
+        
+        leftTab		= mTabHost.getTabWidget().getChildAt(0);
+        rightTab	= mTabHost.getTabWidget().getChildAt(1);
+        
+        leftTab.setBackgroundResource(R.drawable.bn);
+    	rightTab.setBackgroundResource(R.drawable.te);
+         
         return mRoot;
     }
  
@@ -71,7 +82,7 @@ public class MorningCall extends Fragment implements OnTabChangeListener {
  
         TabSpec tabSpec = mTabHost.newTabSpec(tag);
         //tabSpec.setIndicator(String.valueOf(labelId));
-        tabSpec.setIndicator(tag);
+        tabSpec.setIndicator("");
         tabSpec.setContent(tabContentId);
         return tabSpec;
     }
@@ -80,16 +91,27 @@ public class MorningCall extends Fragment implements OnTabChangeListener {
     public void onTabChanged(String tabId) {
         Log.d(TAG, "onTabChanged(): tabId=" + tabId);
         if (TAB_RANDOMCALL.equals(tabId)) {
+        	
+        	leftTab.setBackgroundResource(R.drawable.bn);
+        	rightTab.setBackgroundResource(R.drawable.te);
+        	
             updateTab(tabId, R.id.tab_1);
+                                               
             mCurrentTab = 0;
             return;
         }
         if (TAB_FRIENDSCALL.equals(tabId)) {
             updateTab(tabId, R.id.tab_2);
+                        
+            leftTab.setBackgroundResource(R.drawable.te);
+        	rightTab.setBackgroundResource(R.drawable.bn);
+            
             mCurrentTab = 1;
             return;
         }
     }
+    
+    
  
     private void updateTab(String tabId, int placeholder) {
         FragmentManager fm = getFragmentManager();
@@ -106,5 +128,7 @@ public class MorningCall extends Fragment implements OnTabChangeListener {
         	}        	
         }        
     }
+    
+    
  
 }
