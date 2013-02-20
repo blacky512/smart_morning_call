@@ -121,7 +121,7 @@ public class LoginActivity extends Activity {
 		//super.onBackPressed();
 		if(!end){
 			end = true;
-			Toast.makeText(getApplicationContext(), "뒤로 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "뒤로 버튼을 한번 더 누르면 종료됩니다.(미구현)", Toast.LENGTH_SHORT).show();
 			
 			Thread thread = new Thread(new Runnable() {
 				
