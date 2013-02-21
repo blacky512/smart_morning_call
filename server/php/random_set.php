@@ -5,8 +5,10 @@
 	$temp = json_decode(file_get_contents('php://input') , true);
 	print_r($temp);
 //	$temp = $_POST;
+	$is_update= 'false';
+//	print_r($is_update);
 
-	$is_update= $temp['is_update'];
+//	$is_update= $temp['is_update'];
 	$id =$_SESSION['id'];
 
 	if($is_update=="false"){

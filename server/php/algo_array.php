@@ -2,14 +2,15 @@
 	session_start();
 	include "./connect.php";
 
-	$temp = json_decode(file_get_contents('php://input') , true);
-	print_r($temp);
-//	$temp = $_POST;
+//	$temp = json_decode(file_get_contents('php://input') , true);
+//	print_r($temp);
+	$temp = $_POST;
 	
-	$id=$temp['id'];
-//	$time="06:00:00";
+	$id = 'test';
+//	$id=$temp['id'];
+	$time="06:00:00";
 
-	$time=$temp['time'];
+//	$time=$temp['time'];
 
 	$f_sql = "select id, ip_public, ip_virtual
 			from random_db
@@ -32,9 +33,9 @@
 	$num=max(intval($f_num), intval($m_num));
 
 
-	$user_id=$_SESSION['id'];
+//	$user_id=$_SESSION['id'];
 
-//	$user_id='test';
+	$user_id='test';
 
 	for($i=0; $i<$num; $i++){
 		$f_row[$i]=mysql_fetch_array($f_result);
