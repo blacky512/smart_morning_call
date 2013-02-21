@@ -2,9 +2,12 @@ package whitepaper.smcall;
 
 import whitepaper.smcall.alarm.AlarmStr;
 import whitepaper.smcall.remote.Jax;
+import whitepaper.smcall.remote.MatchInfo;
 import whitepaper.smcall.remote.Mjpage;
 import whitepaper.smcall.remote.Utils;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.app.Activity;
@@ -30,9 +33,9 @@ public class AlarmReceiverActivity extends Activity {
 	private PowerManager.WakeLock wl;
 	private Jax	jax;
 	
-	private Button stopAlarm;	
-	
+	private Button stopAlarm;
 	private Vibrator vibrator;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,16 +48,51 @@ public class AlarmReceiverActivity extends Activity {
 		
 		jax = new Jax();
 		
-		sendInfo();
+		matchPolling();
 		
 		// 화면 OFF와 잠금을 뚫고 액티비티 띄우기
-		wakeUp();
+		wakeUp();		
+		
 		
 		// 알람기능
 		alarming();
 				
 				
 		wl.release();
+	}
+	
+	private void matchPolling()	{
+		
+		Thread thread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				String[] values = {"time", AlarmStr.getTime(),
+						   			"id", AlarmStr.id};
+				String ret;
+				
+				while(true){					
+					ret = jax.sendJson(Mjpage.algo_array, values);
+					if(Boolean.valueOf(jax.getValue(ret, "call"))){
+						MatchInfo.match_private_Ip = jax.getValue(ret, "ip_private");
+						MatchInfo.available = true;
+						// 연결처리
+						Message retmsg = Message.obtain(mainHandler, 0);			
+						mainHandler.sendMessage(retmsg);
+						
+						break;
+					}else{
+						Toast.makeText(getApplicationContext(), "상대 받아오기 실패", Toast.LENGTH_SHORT).show();
+						break;
+					}
+				}
+				
+			}
+		});
+		
+		thread.start();
+		
 	}
 	
 	private void wakeUp(){
@@ -90,25 +128,7 @@ public class AlarmReceiverActivity extends Activity {
 
 		alarmThread.start();				
 	}
-	
-	private void sendInfo(){
-		Thread sendThread = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				String[] value = {	"time",			String.format("%02d", AlarmStr.time_hour)+":"+String.format("%02d", AlarmStr.time_minute)+":"+"00", 
-					  	"id",			AlarmStr.id,
-					  	"ip_public" ,	"000.000.000.000",
-					  	"ip_private",	Utils.getPrivateIP(mActivity)};
-			
-				String ret = jax.sendJson(Mjpage.algo_update, value);
-				Log.i(tag, ret);				
-			}
-		});
 		
-		sendThread.start();
-	}
 	
 	View.OnClickListener onClickListener = new View.OnClickListener() {
 		
@@ -144,5 +164,22 @@ public class AlarmReceiverActivity extends Activity {
 		// TODO Auto-generated method stub
 		//super.onBackPressed();
 	}
+	
+	public Handler mainHandler = new Handler(){
+		@Override
+		public void handleMessage(Message msg) {
+			// TODO Auto-generated method stub
+			super.handleMessage(msg);
+			
+			switch (msg.what) {
+			case 0:
+				Toast.makeText(getApplicationContext(), "완료", Toast.LENGTH_SHORT).show();
+				break;
+
+			default:
+				break;
+			}
+		}
+	};
 
 }

@@ -1,5 +1,7 @@
 package whitepaper.smcall;
 
+import whitepaper.smcall.alarm.AlarmStr;
+import whitepaper.smcall.remote.Utils;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -16,6 +18,7 @@ public class MorningCallActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.morningcall_activity);
 		
+		AlarmStr.private_ip = Utils.getPrivateIP(mActivity);
 		/*
 		Intent i = new Intent("whitepaper.smcall");
 		i.putExtra("serv", "serv");

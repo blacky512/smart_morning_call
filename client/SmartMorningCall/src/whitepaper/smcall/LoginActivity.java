@@ -59,8 +59,9 @@ public class LoginActivity extends Activity {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnLg:
+				/*
 				Intent i1 = new Intent(LoginActivity.this, MorningCallActivity.class);
-				startActivity(i1);
+				startActivity(i1);*/
 				
 				// 입력에 대한 예외처리
 				if((editText_id.getText().length() == 0 && editText_pw.getText().length() == 0)){
@@ -83,7 +84,9 @@ public class LoginActivity extends Activity {
 				if(Boolean.valueOf(jax.getValue(ret, "result"))){
 					Toast.makeText(getApplicationContext(), ret, Toast.LENGTH_SHORT).show();			
 					
-					//@ 로그인 성공할 경우 디비에 계정정보 저장한 후(먼저 기존 아이디 삭제) 다음 액티비티로 이동
+					scDB.initAccount();
+					scDB.insertAccount(id, pw);
+					AlarmStr.id = id;
 					
 					Intent i = new Intent(LoginActivity.this, MorningCallActivity.class);
 					startActivity(i);					

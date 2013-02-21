@@ -5,6 +5,8 @@ import java.util.Calendar;
 import whitepaper.smcall.AlarmReceiverActivity;
 import whitepaper.smcall.R;
 import whitepaper.smcall.alarm.AlarmStr;
+import whitepaper.smcall.remote.Jax;
+import whitepaper.smcall.remote.Mjpage;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
@@ -30,9 +32,12 @@ import android.widget.ToggleButton;
 
 public class RandomCallFrg extends Fragment {
 
+	private final String TAG = "RAN";
 	private static final int DIALOG_TIME = 0;
 		
 	private Calendar	calendar;
+	
+	private Jax			jax;
 
 	private View mView;
 
@@ -84,6 +89,7 @@ public class RandomCallFrg extends Fragment {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		
+		jax = new Jax();
 		viewInit();
 				
 		calendar	= Calendar.getInstance();
@@ -127,18 +133,34 @@ public class RandomCallFrg extends Fragment {
 			case R.id.onoff:
 				//Toast.makeText(getActivity(), String.valueOf(onoff.isChecked()), Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent(getActivity(), whitepaper.smcall.AlarmReceiverActivity.class);
-		        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(),
-		            12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+				
+		        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		        AlarmManager am = (AlarmManager) getActivity().getSystemService(Activity.ALARM_SERVICE);;
+		        
 				if(onoff.isChecked()){	// 사용
 					// 알람등록
-					
 			        
 			        Calendar cal = Calendar.getInstance();
 			        cal.set(Calendar.HOUR_OF_DAY, AlarmStr.time_hour);
 			        cal.set(Calendar.MINUTE, AlarmStr.time_minute);
 			        //add(Calendar.SECOND, 5);
+			        
+			        // 서버에 알람 설정
 			        			        
+			        String[] values = {"hour", String.valueOf(AlarmStr.time_hour),
+			        				   "minute", String.valueOf(AlarmStr.time_minute)};
+			        
+			        String ret = jax.sendJson(Mjpage.set_alarm, values);
+			        
+			        if(Boolean.valueOf(jax.getValue(ret, "result"))){
+			        	Toast.makeText(getActivity(), "서버에 등록되었습니다.", Toast.LENGTH_SHORT).show();
+			        }else{
+			        	Toast.makeText(getActivity(), "등록 실패", Toast.LENGTH_SHORT).show();
+			        	onoff.setChecked(false);
+			        	break;
+			        }
+			        
+			        // 단말기에 알람 설정
 			        am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
 			        
 				}else{					// 사용안함
