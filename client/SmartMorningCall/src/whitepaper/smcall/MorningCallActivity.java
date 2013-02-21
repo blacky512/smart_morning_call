@@ -1,5 +1,7 @@
 package whitepaper.smcall;
 
+import whitepaper.smcall.alarm.AlarmStr;
+import whitepaper.smcall.remote.Utils;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -8,12 +10,15 @@ import android.view.Menu;
 import android.widget.Toast;
 
 public class MorningCallActivity extends FragmentActivity {
+	FragmentActivity mActivity = this;
+	boolean end = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.morningcall_activity);
 		
+		AlarmStr.private_ip = Utils.getPrivateIP(mActivity);
 		/*
 		Intent i = new Intent("whitepaper.smcall");
 		i.putExtra("serv", "serv");
@@ -34,7 +39,33 @@ public class MorningCallActivity extends FragmentActivity {
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		// super.onBackPressed();
-		Toast.makeText(getApplicationContext(), "뒤로 버튼을 한번 더 누르면 종료됩니다.(미구현)", Toast.LENGTH_SHORT).show();
+		if(!end){
+			end = true;
+			Toast.makeText(getApplicationContext(), "뒤로 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+			
+			Thread thread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					end = false;
+					
+				}
+			});
+			thread.start();
+		}else{			
+			Intent launchHome = new Intent(Intent.ACTION_MAIN);
+			launchHome.addCategory(Intent.CATEGORY_DEFAULT);
+			launchHome.addCategory(Intent.CATEGORY_HOME);
+			startActivity(launchHome);				
+		}	
 	}
 
 }

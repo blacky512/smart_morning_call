@@ -1,0 +1,12 @@
+package whitepaper.smcall.remote;
+
+public class MatchInfo {
+	public static boolean available = false; 
+	
+	public static String match_private_Ip;
+	public static String match_private_port;
+	
+	public static String match_publicIp;
+	public static String match_public_port;
+	
+}

@@ -1,0 +1,37 @@
+package whitepaper.smcall.fragment;
+
+import whitepaper.smcall.R;
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+
+public class DaySelect extends DialogFragment{
+	
+	private static final String TAG = "DaySelect";
+	private View mRoot;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		Log.i(TAG, "onAttach");
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		mRoot = inflater.inflate(R.layout.dayselect_frag, null);
+		this.getActivity().requestWindowFeature(Window.FEATURE_NO_TITLE);
+				
+		//return super.onCreateView(inflater, container, savedInstanceState);
+		return mRoot;
+	}
+
+}

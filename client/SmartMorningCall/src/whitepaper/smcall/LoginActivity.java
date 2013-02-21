@@ -1,5 +1,6 @@
 package whitepaper.smcall;
 
+import whitepaper.smcall.alarm.AlarmStr;
 import whitepaper.smcall.db.SmcallDB;
 import whitepaper.smcall.remote.Jax;
 import whitepaper.smcall.remote.Mjpage;
@@ -58,6 +59,9 @@ public class LoginActivity extends Activity {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btnLg:
+				/*
+				Intent i1 = new Intent(LoginActivity.this, MorningCallActivity.class);
+				startActivity(i1);*/
 				
 				// 입력에 대한 예외처리
 				if((editText_id.getText().length() == 0 && editText_pw.getText().length() == 0)){
@@ -71,7 +75,7 @@ public class LoginActivity extends Activity {
 					break;
 				}
 				
-				String id = editText_id.getText().toString();
+				String id = editText_id.getText().toString(); AlarmStr.id = id;
 				String pw = editText_pw.getText().toString();
 				
 				String[]	values 	= {"id", id, "pw", pw};
@@ -80,8 +84,10 @@ public class LoginActivity extends Activity {
 				if(Boolean.valueOf(jax.getValue(ret, "result"))){
 					Toast.makeText(getApplicationContext(), ret, Toast.LENGTH_SHORT).show();			
 					
-					//@ 로그인 성공할 경우 디비에 계정정보 저장한 후(먼저 기존 아이디 삭제) 다음 액티비티로 이동
-					//@ 로그인 실패시 틀렸다는 것을 알림
+					scDB.initAccount();
+					scDB.insertAccount(id, pw);
+					AlarmStr.id = id;
+					
 					Intent i = new Intent(LoginActivity.this, MorningCallActivity.class);
 					startActivity(i);					
 				}else{
@@ -109,6 +115,40 @@ public class LoginActivity extends Activity {
 		//getMenuInflater().inflate(R.menu.activity_main, menu);
 		// 옵션메뉴 없음
 		return true;
+	}
+	
+	private boolean end = false;
+	@Override
+	public void onBackPressed() {
+		// TODO Auto-generated method stub
+		//super.onBackPressed();
+		if(!end){
+			end = true;
+			Toast.makeText(getApplicationContext(), "뒤로 버튼을 한번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+			
+			Thread thread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					try {
+						Thread.sleep(2000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					end = false;
+					
+				}
+			});
+			thread.start();
+		}else{			
+			Intent launchHome = new Intent(Intent.ACTION_MAIN);
+			launchHome.addCategory(Intent.CATEGORY_DEFAULT);
+			launchHome.addCategory(Intent.CATEGORY_HOME);
+			startActivity(launchHome);				
+		}
 	}
 
 }

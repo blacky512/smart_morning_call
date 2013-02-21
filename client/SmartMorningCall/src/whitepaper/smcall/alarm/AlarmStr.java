@@ -5,6 +5,9 @@ public class AlarmStr {
 	// ID
 	public static String 		id;
 	
+	public static String		private_ip;
+	public static String		public_ip;
+	
 	// ½Ã°£
 	public static int			time_hour;
 	public static int			time_minute;
@@ -27,5 +30,13 @@ public class AlarmStr {
 	
 	public AlarmStr(){
 		
+	}
+	
+	public static String getTime(){
+		String strHour	= String.format("%02d", AlarmStr.time_hour);
+        String strMin	= String.format("%02d", AlarmStr.time_minute);
+        
+        String ret = strHour+":"+strMin+":"+"00";
+        return ret;		
 	}
 }

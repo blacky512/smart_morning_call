@@ -8,8 +8,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class SmcallDB {
+	private final String TAG = "DB";
+	
 	private static final String 	DATABASE_NAME		= "smcall.db";
 	private static final int 		DATABASE_VERSION	= 1;
 	private SQLiteDatabase 			mDB;
@@ -58,7 +61,10 @@ public class SmcallDB {
 	
 	// 기본정보 테이블 관련 SQL
 	public Cursor getAccount(){		
-		return mDB.query(SmcallDB_Info.BaseInfo._TABLENAME, null, null, null, null, null, null);
+		return mDB.rawQuery("select id, pw " +
+							"from baseinfo",
+							null);
+		//return mDB.query(SmcallDB_Info.BaseInfo._TABLENAME, null, null, null, null, null, null);
 	}
 	public boolean insertAccount(String id, String pw){	// 계정 저장
 		
@@ -73,6 +79,7 @@ public class SmcallDB {
 		values.put(SmcallDB_Info.BaseInfo.PW, pw);
 		
 		mDB.insert(SmcallDB_Info.BaseInfo._TABLENAME, null, values);
+		Log.i(TAG, id+" : "+pw+" 저장되었음");
 		return true;
 	}
 	
@@ -82,10 +89,12 @@ public class SmcallDB {
 		
 		if(cnt == 0) return true;
 		else{
-			Cursor	c	= mDB.query(SmcallDB_Info.BaseInfo._TABLENAME, null, null, null, null, null, null);
-			if(mDB.delete(SmcallDB_Info.BaseInfo._TABLENAME, "_id="+c.getString(0), null) != 0){
+			Cursor	c	= this.getAccount();
+			if(mDB.delete(SmcallDB_Info.BaseInfo._TABLENAME, null, null) != 0){
+				Log.i(TAG, "계정 초기화 완료");
 				return true;
 			}else{
+				Log.i(TAG, "실패");
 				return false;
 			}
 		}

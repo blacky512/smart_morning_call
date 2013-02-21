@@ -5,12 +5,16 @@ import java.util.Calendar;
 import whitepaper.smcall.AlarmReceiverActivity;
 import whitepaper.smcall.R;
 import whitepaper.smcall.alarm.AlarmStr;
+import whitepaper.smcall.remote.Jax;
+import whitepaper.smcall.remote.Mjpage;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.DialogInterface.OnMultiChoiceClickListener;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -20,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -27,9 +32,12 @@ import android.widget.ToggleButton;
 
 public class RandomCallFrg extends Fragment {
 
+	private final String TAG = "RAN";
 	private static final int DIALOG_TIME = 0;
 		
 	private Calendar	calendar;
+	
+	private Jax			jax;
 
 	private View mView;
 
@@ -38,6 +46,9 @@ public class RandomCallFrg extends Fragment {
 	private TextView tv3;
 	private TextView tv4;
 	private TextView tv5;
+	
+	
+	private ImageButton[] btn_days = new ImageButton[7];	
 
 	private Button btn_setTime;
 	
@@ -54,6 +65,19 @@ public class RandomCallFrg extends Fragment {
 			Bundle savedInstanceState) {
 
 		mView = inflater.inflate(R.layout.randomcall_frag, null);
+		
+		btn_days[0] = (ImageButton)mView.findViewById(R.id.btn_mon);
+		btn_days[1] = (ImageButton)mView.findViewById(R.id.btn_tue);
+		btn_days[2] = (ImageButton)mView.findViewById(R.id.btn_wed);
+		btn_days[3] = (ImageButton)mView.findViewById(R.id.btn_thu);
+		btn_days[4] = (ImageButton)mView.findViewById(R.id.btn_fri);
+		btn_days[5] = (ImageButton)mView.findViewById(R.id.btn_sat);
+		btn_days[6] = (ImageButton)mView.findViewById(R.id.btn_sun);
+		
+		for(int i=0; i<7; i++){
+			btn_days[i].setOnClickListener(onClickListener);
+		}
+				
 
 		// TODO Auto-generated method stub
 		return mView;
@@ -65,6 +89,7 @@ public class RandomCallFrg extends Fragment {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 		
+		jax = new Jax();
 		viewInit();
 				
 		calendar	= Calendar.getInstance();
@@ -89,46 +114,88 @@ public class RandomCallFrg extends Fragment {
 	}
 
 	private View.OnClickListener onClickListener = new View.OnClickListener() {
-
+		FragmentTransaction ft;
+		DialogFragment newFragment;
+		
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.btn_settime:
-				FragmentTransaction ft = getFragmentManager()
+				ft = getFragmentManager()
 						.beginTransaction();
-				DialogFragment newFragment = new TimePickerDialogFragment();
+				newFragment = new TimePickerDialogFragment();
+								
 				newFragment.show(ft, "dialog");
 				
 				break;
 				
 			case R.id.onoff:
 				//Toast.makeText(getActivity(), String.valueOf(onoff.isChecked()), Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(getActivity(), whitepaper.smcall.AlarmReceiverActivity.class);
+				
+		        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(), 12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+		        AlarmManager am = (AlarmManager) getActivity().getSystemService(Activity.ALARM_SERVICE);;
+		        
 				if(onoff.isChecked()){	// 사용
 					// 알람등록
-					Intent intent = new Intent(getActivity(), whitepaper.smcall.AlarmReceiverActivity.class);
-			        PendingIntent pendingIntent = PendingIntent.getActivity(getActivity(),
-			            12345, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 			        
 			        Calendar cal = Calendar.getInstance();
 			        cal.set(Calendar.HOUR_OF_DAY, AlarmStr.time_hour);
 			        cal.set(Calendar.MINUTE, AlarmStr.time_minute);
 			        //add(Calendar.SECOND, 5);
 			        
-			        AlarmManager am = 
-			            (AlarmManager) getActivity().getSystemService(Activity.ALARM_SERVICE);
+			        // 서버에 알람 설정
+			        			        
+			        String[] values = {"hour", String.valueOf(AlarmStr.time_hour),
+			        				   "minute", String.valueOf(AlarmStr.time_minute)};
+			        
+			        String ret = jax.sendJson(Mjpage.set_alarm, values);
+			        
+			        if(Boolean.valueOf(jax.getValue(ret, "result"))){
+			        	Toast.makeText(getActivity(), "서버에 등록되었습니다.", Toast.LENGTH_SHORT).show();
+			        }else{
+			        	Toast.makeText(getActivity(), "등록 실패", Toast.LENGTH_SHORT).show();
+			        	onoff.setChecked(false);
+			        	break;
+			        }
+			        
+			        // 단말기에 알람 설정
 			        am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
 			        
 				}else{					// 사용안함
 					// 알람해제
+					am.cancel(pendingIntent);
 				}
+				break;
+				
+			case R.id.btn_mon:
+				//AlarmStr.repeat[0] = 
+				//break;
+			case R.id.btn_tue:
+				//break;
+			case R.id.btn_wed:
+				//break;
+			case R.id.btn_thu:
+				//break;
+			case R.id.btn_fri:
+				//break;
+			case R.id.btn_sat:
+				//break;
+			case R.id.btn_sun:
+				ft = getFragmentManager()
+				.beginTransaction();				
+				newFragment = new DaySelect();
+				//newFragment.setStyle(R.style.AppTheme, android.R.style.Theme_NoTitleBar_OverlayActionModes);
+				//newFragment.setRetainInstance(true);
+				newFragment.show(ft, "dialog");
 				break;
 
 			default:
 				break;
 			}
 		}
-	};
+	};	
 	
 
 	public OnTimeSetListener onTimeSetListener = new OnTimeSetListener() {
@@ -158,9 +225,9 @@ public class RandomCallFrg extends Fragment {
 			
 			int hour	= calendar.get(Calendar.HOUR_OF_DAY);
 			int minute	= (calendar.get(Calendar.MINUTE)+1) % 60;
-			
-			return new TimePickerDialog(getActivity(), STYLE_NORMAL,
-					onTimeSetListener, hour, minute, false);			
+			return new TimePickerDialog(getActivity(), android.R.style.Theme_Holo_Dialog, onTimeSetListener, hour, minute, true);
+			/*return new TimePickerDialog(getActivity(), STYLE_NORMAL,
+					onTimeSetListener, hour, minute, false);*/			
 		}
 	}
 }

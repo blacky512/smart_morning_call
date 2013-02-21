@@ -1,0 +1,177 @@
+package whitepaper.smcall.remote;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Enumeration;
+import java.util.Scanner;
+
+import org.apache.http.conn.util.InetAddressUtils;
+
+import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.util.Log;
+import android.widget.Toast;
+
+/**
+ * ?œë²„?Œì¼“ ì£¼ì†Œë¥??Œê¸° ?„í•´ ?¬ìš©
+ * @type 1: IPv4, 2: IPv6 
+ * @author kyobum
+ *
+ */
+public class Utils {
+	public final static int INET4ADDRESS = 1;
+	public final static int INET6ADDRESS = 2;
+
+	//public static String publicIP;
+	
+	static ConnectivityManager	connManager;
+	static boolean 				isWifi;
+	
+	public static String getPrivateIP(Activity activity){
+		connManager	= (ConnectivityManager) activity.getSystemService (Context.CONNECTIVITY_SERVICE);
+		isWifi 		= connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+		
+		if(isWifi){
+			WifiManager wifiManager = (WifiManager) activity.getSystemService(Context.WIFI_SERVICE);
+			WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+			int ipAddress = wifiInfo.getIpAddress();
+	         	         
+	        return intToIp(ipAddress);
+		}else{
+			//@ 3G ë°?4G??ê²½ìš° ?ˆëœ?¤ê³  ?Œë¦¬?„ë¡ ì¶”ê??´ì•¼??			
+			return getLocalIpAddress2();
+			//return getLocalIpAddress(1);
+	    }	
+	}
+	
+	private static String intToIp(int i) { 
+    	return (i  & 0xFF) + "." +
+    	((i >> 8 ) & 0xFF) + "." +
+    	((i >> 16 ) & 0xFF) + "." +
+    	((i >> 24 ) & 0xFF);
+    }
+	
+	static String publicIP = "";
+	public static String getPublicIP(){
+		
+		InetAddress iAddr = getExternalIp();
+		return iAddr.getHostAddress();
+	};
+	
+	public static InetAddress getExternalIp() throws IOException {
+	    URL url = new URL("http://automation.whatismyip.com/n09230945.asp");
+	    URLConnection connection = url.openConnection();
+	    connection.addRequestProperty("Protocol", "Http/1.1");
+	    connection.addRequestProperty("Connection", "keep-alive");
+	    connection.addRequestProperty("Keep-Alive", "1000");
+	    connection.addRequestProperty("User-Agent", "Web-Agent");
+
+	    Scanner s = new Scanner(connection.getInputStream());
+	    try {
+	        return InetAddress.getByName(s.nextLine());
+	    } finally {
+	        s.close();
+	    }
+	}
+	/*
+	public static class GetIP extends Thread{
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			super.run();
+			try {
+				URL whatismyip = new URL("http://www.whatismyip.org/");
+				HttpURLConnection con = (HttpURLConnection) whatismyip.openConnection();
+				InputStream is = con.getInputStream();
+				InputStreamReader isr = new InputStreamReader(is);
+				BufferedReader br = new BufferedReader(isr);
+				publicIP = br.readLine();
+				Log.i("STUN", publicIP);
+				br.close();
+				is.close();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				Log.i("STUN",e.toString());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Log.i("STUN",e.toString());
+			} catch (Exception e){
+				Log.i("STUN",e.toString());
+			}			
+		}
+		
+	}*/
+	 
+
+	public static String getLocalIpAddress(int type) {
+		try {
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = ( NetworkInterface ) en.nextElement();
+				for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+					InetAddress inetAddress = ( InetAddress ) enumIpAddr.nextElement();
+					if (!inetAddress.isLoopbackAddress()) {
+						switch (type) {
+						case INET6ADDRESS:
+							if (inetAddress instanceof Inet6Address) {
+								return inetAddress.getHostAddress().toString();
+							}
+							break;
+
+						case INET4ADDRESS:
+							if (inetAddress instanceof Inet4Address) {
+								return inetAddress.getHostAddress().toString();
+							}
+							break;
+						}
+					}
+				}
+			}
+		} catch (SocketException ex) {
+		}
+		return null;
+	}
+	
+	public static String getLocalIpAddress2() {
+	    try {
+	        for (Enumeration<NetworkInterface> en = NetworkInterface
+	                .getNetworkInterfaces(); en.hasMoreElements();) {
+	            NetworkInterface intf = en.nextElement();
+	            for (Enumeration<InetAddress> enumIpAddr = intf
+	                    .getInetAddresses(); enumIpAddr.hasMoreElements();) {
+	                InetAddress inetAddress = enumIpAddr.nextElement();
+	                System.out.println("ip1--:" + inetAddress);
+	                System.out.println("ip2--:" + inetAddress.getHostAddress());
+
+	      // for getting IPV4 format
+	      if (!inetAddress.isLoopbackAddress() && InetAddressUtils.isIPv4Address(inetAddress.getHostAddress())) {
+
+	                    String ip = inetAddress.getHostAddress();
+	                    
+	                    // return inetAddress.getHostAddress().toString();
+	                    return ip;
+	                }
+	            }
+	        }
+	    } catch (Exception ex) {
+	        //Log.e("IP Address", ex.toString());
+	    }
+	    return null;
+	}
+	
+	
+	
+}

@@ -1,0 +1,5 @@
+package whitepaper.smcall.remote;
+
+public class MatchInfo {
+
+}
