@@ -16,29 +16,27 @@ import android.util.Log;
 
 public class Voicechat {
 	
-    private	String	LOG_TAG = "UdpStream";
+	
+	
+	
+    static final String LOG_TAG = "UdpStream";
+    static String	HOST = "";
+    static final int AUDIO_PORT = 7771;
+    static final int SAMPLE_RATE = 8000;
+    static final int SAMPLE_INTERVAL = 20; // milliseconds
+    static final int SAMPLE_SIZE = 2; // bytes per sample
+    static final int BUF_SIZE = SAMPLE_INTERVAL*SAMPLE_INTERVAL*SAMPLE_SIZE*2;
     
-    private	String	HOST = "";
-    private	int 	AUDIO_PORT = 7771;
-    
-    private	final int SAMPLE_RATE = 8000;
-    private	final int SAMPLE_INTERVAL = 20; // milliseconds
-    private	final int SAMPLE_SIZE = 2; // bytes per sample
-    private	final int BUF_SIZE = SAMPLE_INTERVAL*SAMPLE_INTERVAL*SAMPLE_SIZE*2;
-    
-    private	Thread	sendThread;
-    private	Thread	rcvThread; 
-    
-    
-    public Voicechat(String host, int audio_port){
-    	this.HOST			= host;
-    	this.AUDIO_PORT		= audio_port; 
+    public Voicechat(String Host, int port){
+    	HOST = Host;
+    	///AUDIO_PORT = port;
     }
     
+    public Thread sendThread;
 	public void SendMicAudio() {
 		sendThread = new Thread(new Runnable() {
 			
-			boolean onOff = true;
+			boolean available = true;
 			
 			public void run() {
 				
@@ -60,7 +58,7 @@ public class Voicechat {
 					DatagramSocket sock = new DatagramSocket();					
 				
 					audio_recorder.startRecording();
-					while (onOff) {
+					while (available) {
 						bytes_read = audio_recorder.read(buf, 0, BUF_SIZE);
 						DatagramPacket pack = new DatagramPacket(buf,
 								bytes_read, addr, AUDIO_PORT);
@@ -86,25 +84,21 @@ public class Voicechat {
 			} // end run
 			
 			public void kill(){
-            	onOff = false;
-            	
-            	try {
-					this.finalize();
-				} catch (Throwable e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
+				available = false;				
+			}
 		});
 		sendThread.start();
 	}
 	
+	public void StopMicAudio(){
+		sendThread.stop();
+	}
+	
+	public Thread recvThread;
     public void RecvAudio()
     {
-        rcvThread = new Thread(new Runnable() {
+    	recvThread = new Thread(new Runnable() {
             
-        	boolean onOff = true;
-        	
             public void run() 
             {
                 Log.e(LOG_TAG, "start recv thread, thread id: "
@@ -119,11 +113,11 @@ public class Voicechat {
                     DatagramSocket sock = new DatagramSocket(AUDIO_PORT);
                     byte[] buf = new byte[BUF_SIZE];
 
-                    while(onOff)
+                    while(true)
                     {
                         DatagramPacket pack = new DatagramPacket(buf, BUF_SIZE);
                         sock.receive(pack);
-                        Log.d(LOG_TAG, "recv pack: " + pack.getLength());
+                       // Log.d(LOG_TAG, "recv pack: " + pack.getLength());
                         track.write(pack.getData(), 0, pack.getLength());
                     }
                 }
@@ -136,19 +130,11 @@ public class Voicechat {
                     Log.e(LOG_TAG, "IOException" + ie.toString());
                 }
             } // end run
-            
-            public void kill(){
-            	onOff = false;
-            	
-            	try {
-					this.finalize();
-				} catch (Throwable e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-            }
         });
-        rcvThread.start();
+    	recvThread.start();
     }
-
+    
+    public void StopRecvAudio(){
+    	recvThread.stop();
+    }
 }

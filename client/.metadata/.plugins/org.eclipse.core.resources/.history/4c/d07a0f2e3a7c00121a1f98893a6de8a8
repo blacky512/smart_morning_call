@@ -1,0 +1,32 @@
+package whitepaper.smcall.fragment;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+public class VoicechattingFrag extends DialogFragment{
+	
+	private static final String TAG = "VC_FRAG";
+	
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		setStyle(DialogFragment.STYLE_NO_FRAME, 
+				android.R.style.Theme_Holo_Light_Dialog);
+		
+		Log.i(TAG, "onAttach");
+		
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		return super.onCreateView(inflater, container, savedInstanceState);
+	}
+
+}

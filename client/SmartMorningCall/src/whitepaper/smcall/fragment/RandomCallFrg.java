@@ -145,15 +145,21 @@ public class RandomCallFrg extends Fragment {
 			        cal.set(Calendar.MINUTE, AlarmStr.time_minute);
 			        //add(Calendar.SECOND, 5);
 			        
-			        // 서버에 알람 설정
-			        			        
-			        String[] values = {"hour", String.valueOf(AlarmStr.time_hour),
-			        				   "minute", String.valueOf(AlarmStr.time_minute)};
-			        
+			        // 서버에 알람 설정			        			        
+			        String[] values = { "id", AlarmStr.id,
+			        					"hour", String.valueOf(AlarmStr.time_hour),
+			        				    "minute", String.valueOf(AlarmStr.time_minute)};			        
 			        String ret = jax.sendJson(Mjpage.set_alarm, values);
 			        
 			        if(Boolean.valueOf(jax.getValue(ret, "result"))){
 			        	Toast.makeText(getActivity(), "서버에 등록되었습니다.", Toast.LENGTH_SHORT).show();
+			        	
+			        	
+			        	String[] values_ip = {"id", AlarmStr.id,
+			        			  			  "ip_public", "000.000.000.000",
+			        			  			  "ip_virtual", AlarmStr.private_ip};
+			        	jax.sendJson(Mjpage.algo_update, values_ip);
+			        	
 			        }else{
 			        	Toast.makeText(getActivity(), "등록 실패", Toast.LENGTH_SHORT).show();
 			        	onoff.setChecked(false);
@@ -168,6 +174,7 @@ public class RandomCallFrg extends Fragment {
 					am.cancel(pendingIntent);
 				}
 				break;
+				
 				
 			case R.id.btn_mon:
 				//AlarmStr.repeat[0] = 

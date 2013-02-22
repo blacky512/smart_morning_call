@@ -1,17 +1,26 @@
 package whitepaper.smcall;
 
 import whitepaper.smcall.alarm.AlarmStr;
+import whitepaper.smcall.fragment.RandomCallFrg.TimePickerDialogFragment;
+import whitepaper.smcall.fragment.VoicechattingFrag;
 import whitepaper.smcall.remote.Jax;
 import whitepaper.smcall.remote.MatchInfo;
 import whitepaper.smcall.remote.Mjpage;
 import whitepaper.smcall.remote.Utils;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -26,8 +35,8 @@ import android.widget.Toast;
  * 
  */
 
-public class AlarmReceiverActivity extends Activity {
-	private final String tag = "JAX";
+public class AlarmReceiverActivity extends FragmentActivity {
+	private final String TAG = "JAX";
 	private Activity mActivity = this;
 
 	private PowerManager.WakeLock wl;
@@ -35,6 +44,8 @@ public class AlarmReceiverActivity extends Activity {
 	
 	private Button stopAlarm;
 	private Vibrator vibrator;
+		
+	public Handler mainHandler;
 	
 
 	@Override
@@ -47,6 +58,25 @@ public class AlarmReceiverActivity extends Activity {
 		
 		
 		jax = new Jax();
+		///////////////////////// 핸들러
+				
+		mainHandler = new Handler(){
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+				
+				switch (msg.what) {
+				case 0:
+					Toast.makeText(getApplicationContext(), "완료", Toast.LENGTH_SHORT).show();
+					break;
+
+				default:
+					break;
+				}
+			}
+		};
+		//////////////////////////////////////// 핸들러 끝
 		
 		matchPolling();
 		
@@ -67,6 +97,8 @@ public class AlarmReceiverActivity extends Activity {
 			
 			@Override
 			public void run() {
+				Looper.prepare();
+				
 				// TODO Auto-generated method stub
 				String[] values = {"time", AlarmStr.getTime(),
 						   			"id", AlarmStr.id};
@@ -75,7 +107,7 @@ public class AlarmReceiverActivity extends Activity {
 				while(true){					
 					ret = jax.sendJson(Mjpage.algo_array, values);
 					if(Boolean.valueOf(jax.getValue(ret, "call"))){
-						MatchInfo.match_private_Ip = jax.getValue(ret, "ip_private");
+						MatchInfo.match_private_Ip = jax.getValue(ret, "ip_virtual");
 						MatchInfo.available = true;
 						// 연결처리
 						Message retmsg = Message.obtain(mainHandler, 0);			
@@ -87,7 +119,7 @@ public class AlarmReceiverActivity extends Activity {
 						break;
 					}
 				}
-				
+				Looper.loop();				
 			}
 		});
 		
@@ -131,6 +163,9 @@ public class AlarmReceiverActivity extends Activity {
 		
 	
 	View.OnClickListener onClickListener = new View.OnClickListener() {
+		FragmentManager fm = getSupportFragmentManager();
+		//FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		DialogFragment newFragment;
 		
 		@Override
 		public void onClick(View v) {
@@ -138,6 +173,11 @@ public class AlarmReceiverActivity extends Activity {
 			switch (v.getId()){
 			case R.id.stopAlarm:				
 				vibrator.cancel();
+				
+				if(MatchInfo.available){
+					VoicechattingFrag.newInstance().show(fm, TAG);
+					//fm.beginTransaction().show(newFragment).commit();
+				}
 				break;
 			}
 			
@@ -165,21 +205,8 @@ public class AlarmReceiverActivity extends Activity {
 		//super.onBackPressed();
 	}
 	
-	public Handler mainHandler = new Handler(){
-		@Override
-		public void handleMessage(Message msg) {
-			// TODO Auto-generated method stub
-			super.handleMessage(msg);
-			
-			switch (msg.what) {
-			case 0:
-				Toast.makeText(getApplicationContext(), "완료", Toast.LENGTH_SHORT).show();
-				break;
-
-			default:
-				break;
-			}
-		}
-	};
+	
+		
+	
 
 }
