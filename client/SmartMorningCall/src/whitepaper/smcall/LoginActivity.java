@@ -31,8 +31,7 @@ public class LoginActivity extends Activity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		super.onCreate(savedInstanceState);		
-		setContentView(R.layout.login_activity);
-		
+		setContentView(R.layout.login_activity);		
 		view_init();
 		init();		
 	}

@@ -1,0 +1,311 @@
+package whitepaper.smcall.fragment;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import whitepaper.smcall.AlarmReceiverActivity;
+import whitepaper.smcall.R;
+import whitepaper.smcall.alarm.AlarmStr;
+import whitepaper.smcall.remote.MatchInfo;
+import whitepaper.smcall.voicechat.Voicechat;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnKeyListener;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Message;
+import android.support.v4.app.DialogFragment;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class VoicechattingFrag extends DialogFragment {
+
+	private static final String TAG = "VC_FRAG";
+	private View 				mRoot;
+	private Voicechat 			vc;
+	private VoicechattingFrag 	me 			= this;	
+	private HandlerThread 		handlerTh;	
+	
+	private Timer 				timer;
+	
+	private TextView			tv;
+	private TextView			vc_info;
+	private TextView			tv_chat;
+	
+	private TextView			tv_1;
+	private TextView			tv_2;
+	private TextView			tv_3;
+	
+	
+	public Handler mainHandler;
+	
+	public final int DISCONNECTABLETIME		= 30;
+	public final int LIMITTIME				= 60;
+	
+	private Button 				vc_cut;
+	private Button 				vc_confirm;
+	
+	private ImageView			iv_step1;
+	private ImageView			iv_step2;
+	private ImageView			iv_step3;
+	
+	public	Typeface			face;
+	
+	
+
+	public static DialogFragment newInstance() {
+		return new VoicechattingFrag();
+	}
+
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+		setStyle(DialogFragment.STYLE_NO_FRAME,
+				android.R.style.Theme_Holo_Light_Dialog);
+
+		Log.i(TAG, "onAttach");
+	}
+
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setCancelable(false);
+	}
+	
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		mRoot = inflater.inflate(R.layout.voicechatting_frag, container, true);
+		
+		face = Typeface.createFromAsset(getActivity().getAssets(), "font/08SEOULNAMSANL.TTF");
+		
+		tv			= (TextView) mRoot.findViewById(R.id.tvTimer);
+			tv.setTypeface(face);
+		tv_chat		= (TextView) mRoot.findViewById(R.id.tv_chat);
+			tv_chat.setTypeface(face);
+		vc_info		= (TextView) mRoot.findViewById(R.id.vc_infobar);
+			vc_info.setTypeface(face);
+			
+		tv_1		= (TextView) mRoot.findViewById(R.id.tv_1);
+			tv_1.setTypeface(face);
+		tv_2		= (TextView) mRoot.findViewById(R.id.tv_2);
+			tv_2.setTypeface(face);
+		tv_3		= (TextView) mRoot.findViewById(R.id.tv_3);
+			tv_3.setTypeface(face);
+		
+		
+		vc_cut		= (Button) mRoot.findViewById(R.id.voicechat_cut);
+			vc_cut.setOnClickListener(onClickListener);
+		vc_confirm	= (Button) mRoot.findViewById(R.id.voicechat_confirm);
+			vc_confirm.setOnClickListener(onClickListener);
+				
+		//iv_step1	= (ImageView) mRoot.findViewById(R.id.voicechat_step1);
+		//iv_step2	= (ImageView) mRoot.findViewById(R.id.voicechat_step2);
+		//iv_step3	= (ImageView) mRoot.findViewById(R.id.voicechat_step3);
+				
+		
+		handlerTh = new HandlerThread("name");
+		handlerTh.start();		
+		mainHandler = new Handler(){
+			
+			
+			@Override
+			public void handleMessage(Message msg) {
+				// TODO Auto-generated method stub
+				super.handleMessage(msg);
+				
+				switch (msg.what) {
+				case 0:	//@ 대화 시간 초과
+					timer.cancel();
+					Toast.makeText(getActivity(), "대화시간 초과", Toast.LENGTH_SHORT).show();
+					
+					vc.RecvAudioSetListenable(false);
+					
+					vc.StopAudio();
+					vc.StopMicAudio();
+					
+					vc_cut.setClickable(false);
+					vc_cut.setBackgroundResource(R.drawable.jhk_cut_04);
+					
+					vc_confirm.setClickable(true);
+					vc_confirm.setBackgroundResource(R.drawable.jhk_confirm_);
+					
+					
+					break;
+					
+				case 1:	// 대화시간 업데이트				
+					tv.setText((String)msg.obj);					
+					break;
+					
+				case 2:	// 패킷 리시브 성공 (이제부터 대화시작)
+					vc.RecvAudioSetListenable(true);
+					timer.schedule(new VoiceChatTimer(mainHandler), 0, 1000);
+					break;
+					
+				case 3: // 패킷 오지 않음 (상대에서 접속 종료함)
+					timer.cancel();
+					vc.StopAudio();
+					vc.StopMicAudio();
+					
+					vc_cut.setClickable(false);
+					vc_cut.setBackgroundResource(R.drawable.jhk_cut_04);
+					
+					vc_confirm.setClickable(true);
+					vc_confirm.setBackgroundResource(R.drawable.jhk_confirm_);
+
+					Toast.makeText(getActivity(), "상대가 대화를 종료했습니다.", Toast.LENGTH_SHORT).show();
+					break;
+					
+				case 4: // 연결 끊기 가능한 시각
+					
+					vc_cut.setClickable(true);
+					vc_cut.setBackgroundResource(R.drawable.jhk_cut_);
+					
+					break;
+				default:
+					break;
+				}
+				
+			}
+		};
+		
+		timer = new Timer(true);
+		vc = new Voicechat(MatchInfo.match_private_Ip, MatchInfo.match_private_port, mainHandler);
+		
+		
+		//timer.schedule(new VoiceChatTimer(mainHandler), 0, 1000);
+		
+		
+		// vc = new Voicechat("112.108.39.212", 7771);		
+		
+		//vc.RecvAudio();
+		//vc.SendMicAudio();
+		return mRoot;
+	}
+	
+	@Override
+	public void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		
+		if(MatchInfo.available){
+			vc.RecvAudio();
+			vc.SendMicAudio();
+			
+		}else{
+			//@ 매치실패 알림
+		}
+		
+	}
+
+	@Override
+	public Dialog onCreateDialog(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		return super.onCreateDialog(savedInstanceState);
+	}
+	
+	public View.OnClickListener onClickListener = new View.OnClickListener() {
+		
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			case R.id.voicechat_cut:
+				timer.cancel();
+				vc.timer.cancel();
+				vc.RecvAudioSetListenable(false);
+				vc.StopMicAudio();
+				vc.StopAudio();				
+				
+				vc_cut.setClickable(false);
+				vc_cut.setBackgroundResource(R.drawable.jhk_cut_04);
+								
+				vc_confirm.setClickable(true);
+				vc_confirm.setBackgroundResource(R.drawable.jhk_confirm_);
+				
+				break;
+			case R.id.voicechat_confirm:
+				
+				vc.StopMicAudio();
+				vc.StopAudio();	
+				((AlarmReceiverActivity) getActivity()).doSomething();
+				
+				dismiss();
+				
+				break;
+
+			default:
+				break;
+			}
+			
+		}
+	};
+	
+
+	public class VoiceChatTimer extends TimerTask {
+
+		Handler mainHandler;
+
+
+		int time_sec = 0;
+
+		int tv_min = 0;
+		int tv_sec = 0;
+		
+		Message retmsg;
+
+		public VoiceChatTimer(Handler mainHandler) {
+			this.mainHandler	= mainHandler;
+		
+		}
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			tv_min = time_sec / 60;
+			tv_sec = time_sec % 60;
+
+			String ret = String.format("%02d", tv_min) + " : "
+					   + String.format("%02d", tv_sec);
+			
+			retmsg = Message.obtain(mainHandler, 1, ret);
+			mainHandler.sendMessage(retmsg);
+			
+			
+			time_sec++;
+			
+
+			if (time_sec == DISCONNECTABLETIME+1){
+				retmsg = Message.obtain(mainHandler, 4);
+				mainHandler.sendMessage(retmsg);
+			}
+
+			if (time_sec > LIMITTIME) {
+				// 시간 제한 알림
+				retmsg = Message.obtain(mainHandler, 0);
+				mainHandler.sendMessage(retmsg);
+
+			}
+		}
+	}
+
+}

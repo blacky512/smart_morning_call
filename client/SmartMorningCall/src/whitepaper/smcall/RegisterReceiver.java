@@ -32,6 +32,6 @@ public class RegisterReceiver extends BroadcastReceiver {
 		}
 
 		Log.i("REG", ret);
-	}
+	} 
 
 }

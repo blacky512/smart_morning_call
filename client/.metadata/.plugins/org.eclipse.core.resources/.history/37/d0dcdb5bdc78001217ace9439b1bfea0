@@ -1,7 +1,0 @@
-package whitepaper.smcall;
-
-import android.app.Service;
-
-public class Serv extends Service {
-
-}

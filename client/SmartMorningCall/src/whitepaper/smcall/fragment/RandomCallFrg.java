@@ -80,7 +80,7 @@ public class RandomCallFrg extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		mView = inflater.inflate(R.layout.randomcall_frag, null);
+		mView = inflater.inflate(R.layout.randomcall_frag, null, false);
 		
 		btn_days[0] = (ImageButton)mView.findViewById(R.id.btn_mon);
 		btn_days[1] = (ImageButton)mView.findViewById(R.id.btn_tue);

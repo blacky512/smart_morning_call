@@ -3,7 +3,7 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mainb"
+    android:background="@drawable/jhk_mainr"
     android:padding="0dp"
     tools:context=".MainActivity" >
 

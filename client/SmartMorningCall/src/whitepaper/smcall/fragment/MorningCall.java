@@ -40,7 +40,7 @@ public class MorningCall extends Fragment implements OnTabChangeListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        mRoot = inflater.inflate(R.layout.morningcall, null);
+        mRoot = inflater.inflate(R.layout.morningcall, null, true);
         mTabHost = (TabHost) mRoot.findViewById(android.R.id.tabhost);
         setupTabs();
         

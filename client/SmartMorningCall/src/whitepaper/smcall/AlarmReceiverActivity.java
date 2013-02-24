@@ -178,6 +178,8 @@ public class AlarmReceiverActivity extends FragmentActivity {
 			case R.id.stopAlarm:				
 				vibrator.cancel();
 				
+				stopAlarm.setVisibility(View.GONE);
+				
 				DialogFragment diaFrag = VoicechattingFrag.newInstance();				
 				diaFrag.show(fm, TAG);				
 				
@@ -189,7 +191,6 @@ public class AlarmReceiverActivity extends FragmentActivity {
 				*/
 				break;
 			}
-			
 		}
 	};
 	
@@ -214,7 +215,13 @@ public class AlarmReceiverActivity extends FragmentActivity {
 		//super.onBackPressed();
 	}
 	
+	public void afterConfirm(){
+		Toast.makeText(getApplicationContext(), "³ª¿À³×?", Toast.LENGTH_SHORT).show();
+	}
 	
+	public void afterCancel(){
+		finish();
+	}
 		
 	
 

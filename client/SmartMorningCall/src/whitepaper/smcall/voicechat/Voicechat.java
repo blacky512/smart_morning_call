@@ -53,6 +53,7 @@ public class Voicechat {
 	}
 	public class SendThread extends Thread{
     	boolean available = true;
+    	AudioRecord audio_recorder;
     	
     	@Override
     	public void run() {
@@ -61,7 +62,7 @@ public class Voicechat {
     		Log.e(LOG_TAG, "start SendMicAudio thread, thread id: "
 					+ Thread.currentThread().getId());
 					
-			AudioRecord audio_recorder = new AudioRecord(
+			audio_recorder = new AudioRecord(
 					MediaRecorder.AudioSource.MIC, SAMPLE_RATE,
 					AudioFormat.CHANNEL_CONFIGURATION_MONO,
 					AudioFormat.ENCODING_PCM_16BIT,
@@ -101,8 +102,13 @@ public class Voicechat {
 			}
     	}
     	
-    	private void kill(){
+    	private void kill(){    		
     		available = false;
+    		
+    		if(audio_recorder.getState() == AudioRecord.STATE_INITIALIZED){
+    			audio_recorder.stop();
+    			audio_recorder.release();
+    		}
     	}
     }
 
@@ -129,6 +135,7 @@ public class Voicechat {
     public class RecvThread extends Thread{
 		boolean available = true;
 		boolean listenable = false;
+		AudioTrack track;
 		
 		@Override
 		public void run() {
@@ -137,7 +144,7 @@ public class Voicechat {
 			
 			Log.e(LOG_TAG, "start recv thread, thread id: "
                     + Thread.currentThread().getId());
-                AudioTrack track = new AudioTrack(AudioManager.STREAM_VOICE_CALL, 
+                track = new AudioTrack(AudioManager.STREAM_VOICE_CALL, 
                         SAMPLE_RATE, AudioFormat.CHANNEL_CONFIGURATION_MONO, 
                         AudioFormat.ENCODING_PCM_16BIT, BUF_SIZE, 
                         AudioTrack.MODE_STREAM);
@@ -188,6 +195,11 @@ public class Voicechat {
 		
 		private void kill(){
 			available = false;
+			
+			if( track.getState() == AudioTrack.STATE_INITIALIZED ){
+				track.stop();
+				track.release();
+			}			
 		}
 		
 		private void setListenable(boolean able){
