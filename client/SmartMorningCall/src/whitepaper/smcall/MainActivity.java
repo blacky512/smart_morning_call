@@ -95,6 +95,9 @@ public class MainActivity extends Activity {
 				nextActivity = LoginActivity.class;
 			}
 			
+			cs.close();
+			scDB.close();
+			
 			
 			Intent i = new Intent(MainActivity.this, nextActivity);
 			startActivity(i);

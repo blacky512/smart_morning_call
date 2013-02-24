@@ -24,9 +24,43 @@ public class SmcallDB_Info implements BaseColumns{
 	public static class MornCallInfo{
 		public static final String _TABLENAME	= "morncallinfo";
 		
+		
+		// Colums
+		public static String HOUR		= "hour";
+		public static String MINUTE		= "minute";
+		
+		public static String RP_0		= "rp0";
+		public static String RP_1		= "rp1";
+		public static String RP_2		= "rp2";
+		public static String RP_3		= "rp3";
+		public static String RP_4		= "rp4";
+		public static String RP_5		= "rp5";
+		public static String RP_6		= "rp6";
+		
+		public static String TYPE_SOUND	= "type_sound";
+		public static String TYPE_VIBE	= "type_vibe";
+		
+		public static String ALIVE		= "alive";
+		
+		
 		//public static final String  
 		
-		public static final String _CREATE		= null;
+		public static final String _CREATE		= 
+				"create table " + _TABLENAME
+				+ "("+ _ID +" integer primary key autoincrement, "
+				+ HOUR + " text not null, "
+				+ MINUTE + " text not null, "
+				+ RP_0 + " text not null, "
+				+ RP_1 + " text not null, "
+				+ RP_2 + " text not null, "
+				+ RP_3 + " text not null, "
+				+ RP_4 + " text not null, "
+				+ RP_5 + " text not null, "
+				+ RP_6 + " text not null, "
+				+ TYPE_SOUND + " text not null, "
+				+ TYPE_VIBE + " text not null, "
+				+ ALIVE + " text not null"
+				+");";
 	}
 	
 	// 친구 테이블

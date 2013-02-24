@@ -81,8 +81,8 @@ public class Voicechat {
         Thread thrd = new Thread(new Runnable() {
             
             public void run() 
-            {
-                Log.e(LOG_TAG, "start recv thread, thread id: "
+            {            	
+                Log.e(LOG_TAG, "start recv thread, thread id:"
                     + Thread.currentThread().getId());
                 AudioTrack track = new AudioTrack(AudioManager.STREAM_VOICE_CALL, 
                         SAMPLE_RATE, AudioFormat.CHANNEL_CONFIGURATION_MONO, 
@@ -97,8 +97,9 @@ public class Voicechat {
                     while(true)
                     {
                         DatagramPacket pack = new DatagramPacket(buf, BUF_SIZE);
+                        Log.d("REC", "recv");
                         sock.receive(pack);
-                       // Log.d(LOG_TAG, "recv pack: " + pack.getLength());
+                        Log.d("REC", "recv pack: " + pack.getLength());
                         track.write(pack.getData(), 0, pack.getLength());
                     }
                 }

@@ -1,0 +1,127 @@
+package whitepaper.smcall.fragment;
+
+import whitepaper.smcall.R;
+import whitepaper.smcall.alarm.AlarmStr;
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.Toast;
+
+public class DaySelect extends DialogFragment {
+
+	private static final String TAG = "DaySelect";
+	private View mRoot;
+	private DialogFragment me = this;
+
+	private CheckBox[] days = new CheckBox[7];
+	private Button confirm;
+	private Button cancle;
+	
+
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+
+		super.onAttach(activity);
+		setStyle(DialogFragment.STYLE_NO_FRAME,
+				android.R.style.Theme_Holo_Light_Dialog);
+
+		Log.i(TAG, "onAttach");
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+
+		mRoot = inflater.inflate(R.layout.dayselect_frag, container, false);
+
+		days[0] = (CheckBox) mRoot.findViewById(R.id.checkBox1);
+		days[1] = (CheckBox) mRoot.findViewById(R.id.checkBox2);
+		days[2] = (CheckBox) mRoot.findViewById(R.id.checkBox3);
+		days[3] = (CheckBox) mRoot.findViewById(R.id.checkBox4);
+		days[4] = (CheckBox) mRoot.findViewById(R.id.checkBox5);
+		days[5] = (CheckBox) mRoot.findViewById(R.id.checkBox6);
+		days[6] = (CheckBox) mRoot.findViewById(R.id.checkBox7);
+
+		for (int i=0; i<7; i++) {
+			days[i].setOnClickListener(onClickListener);			
+			days[i].setChecked(AlarmStr.repeat[i]);
+		}
+		
+		confirm	= (Button)mRoot.findViewById(R.id.days_confirm);
+		confirm.setOnClickListener(onClickListener);
+		
+		cancle	= (Button)mRoot.findViewById(R.id.days_cancle);
+		cancle.setOnClickListener(onClickListener);
+
+		// return super.onCreateView(inflater, container, savedInstanceState);
+		return mRoot;
+	}
+
+	View.OnClickListener onClickListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			switch (v.getId()) {
+			/*
+			case R.id.checkBox1:				
+				days[0].setChecked(!days[0].isChecked());
+				break;
+			case R.id.checkBox2:
+				days[1].setChecked(!days[1].isChecked());
+				break;
+			case R.id.checkBox3:
+				days[2].setChecked(!days[2].isChecked());
+				break;
+			case R.id.checkBox4:
+				days[3].setChecked(!days[3].isChecked());
+				break;
+			case R.id.checkBox5:
+				days[4].setChecked(!days[4].isChecked());
+				break;
+			case R.id.checkBox6:
+				days[5].setChecked(!days[5].isChecked());
+				break;
+			case R.id.checkBox7:
+				days[6].setChecked(!days[6].isChecked());
+				break;
+			*/	
+			case R.id.days_confirm:
+				for(int i=0; i<7; i++){
+					AlarmStr.repeat[i] = days[i].isChecked();
+					Log.i(TAG, String.valueOf(days[i].isChecked()));
+				}
+				Toast.makeText(mRoot.getContext(), AlarmStr.repeat.toString(), Toast.LENGTH_SHORT).show();
+				
+				for(int i=0; i<7; i++){
+					Log.i(TAG, String.valueOf(AlarmStr.repeat[i]));
+				}
+				
+				getTargetFragment().onResume();
+				
+				me.dismiss();
+				
+				break;
+			case R.id.days_cancle:
+				me.dismiss();
+				break;
+
+			default:
+				break;
+			}
+
+		}
+	};
+
+}

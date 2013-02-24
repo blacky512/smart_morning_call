@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AlarmReceiverActivity" >
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="26dp"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:id="@+id/alarmRcv_1"
+            android:layout_width="260dp"
+            android:layout_height="300dp"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <AnalogClock
+                    android:id="@+id/analogClock1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:dial="@drawable/clockcenter"
+                    android:hand_hour="#000000"
+                    android:hand_minute="#000000" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="260dp"
+            android:layout_height="80dp" >
+
+            <Button
+                android:id="@+id/stopAlarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="모닝콜 연결하기" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+    
+
+</RelativeLayout>

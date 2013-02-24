@@ -1,0 +1,24 @@
+import java.util.Arrays;
+
+
+public class aain {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		byte[] by = "server".getBytes();
+		
+		//Arrays.fill(by, "123123server".getBytes());
+		for(int i=0; i<by.length; i++){
+			System.out.print(by[i]);
+			System.out.println();
+		}
+		
+		System.out.print(new String(by,0,by.length));
+		
+
+	}
+
+}

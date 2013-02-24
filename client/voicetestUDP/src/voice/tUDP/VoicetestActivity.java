@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 
 import voice.tUDP.R;
 import android.app.Activity;
@@ -74,9 +75,9 @@ public class VoicetestActivity extends Activity {
 				
 				Addr.host = etAddr.getText().toString();
 								
-				
-				SendMicAudio();
-				RecvAudio();			
+				VoicechatSTUN vs = new VoicechatSTUN();
+				vs.SendMicAudio();
+				vs.RecvAudio();			
 				
 				btnExe.setEnabled(false);
 				
@@ -130,10 +131,15 @@ public class VoicetestActivity extends Activity {
 					DatagramSocket sock = new DatagramSocket();					
 				
 					audio_recorder.startRecording();
+					
+					
 					while (true) {
+					
 						bytes_read = audio_recorder.read(buf, 0, BUF_SIZE);
+						
 						DatagramPacket pack = new DatagramPacket(buf,
 								bytes_read, addr, AUDIO_PORT);
+						
 						sock.send(pack);
 						bytes_count += bytes_read;
 						Log.d(LOG_TAG, "bytes_count : " + bytes_count);
@@ -175,13 +181,20 @@ public class VoicetestActivity extends Activity {
                 {
                     DatagramSocket sock = new DatagramSocket(AUDIO_PORT);
                     byte[] buf = new byte[BUF_SIZE];
-
+                    
+                    Log.d("REC", "started");
+                    
+                   
                     while(true)
                     {
-                        DatagramPacket pack = new DatagramPacket(buf, BUF_SIZE);
+                        DatagramPacket pack = new DatagramPacket(buf, BUF_SIZE);                        
                         sock.receive(pack);
-                       // Log.d(LOG_TAG, "recv pack: " + pack.getLength());
+                        
+                     
+                        
+                        Log.d("REC", "recv pack: " + pack.getLength());
                         track.write(pack.getData(), 0, pack.getLength());
+                        
                     }
                 }
                 catch (SocketException se)

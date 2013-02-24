@@ -25,6 +25,7 @@ public class DaySelect extends DialogFragment {
 	private CheckBox[] days = new CheckBox[7];
 	private Button confirm;
 	private Button cancle;
+	
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -100,12 +101,14 @@ public class DaySelect extends DialogFragment {
 				for(int i=0; i<7; i++){
 					AlarmStr.repeat[i] = days[i].isChecked();
 					Log.i(TAG, String.valueOf(days[i].isChecked()));
-				}
-				Toast.makeText(mRoot.getContext(), AlarmStr.repeat.toString(), Toast.LENGTH_SHORT).show();
+				}				
 				
 				for(int i=0; i<7; i++){
 					Log.i(TAG, String.valueOf(AlarmStr.repeat[i]));
 				}
+				
+				getTargetFragment().onResume();
+				
 				
 				me.dismiss();
 				

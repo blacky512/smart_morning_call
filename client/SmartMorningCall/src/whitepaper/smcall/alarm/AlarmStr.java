@@ -9,8 +9,8 @@ public class AlarmStr {
 	public static String		public_ip;
 	
 	// 시간
-	public static int			time_hour;
-	public static int			time_minute;
+	public static int			time_hour = -1;
+	public static int			time_minute = -1;
 	
 	// 반복설정
 	public static boolean[]	repeat = new boolean[7];

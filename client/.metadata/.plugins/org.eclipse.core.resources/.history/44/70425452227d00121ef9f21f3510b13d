@@ -1,0 +1,18 @@
+import java.util.Arrays;
+
+
+public class aain {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		byte[] by = new byte[500];
+		
+		Arrays.fill(by, "123123server".getBytes());
+		System.out.print();
+
+	}
+
+}

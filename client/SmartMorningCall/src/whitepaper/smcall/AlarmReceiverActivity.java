@@ -36,6 +36,9 @@ import android.widget.Toast;
  */
 
 public class AlarmReceiverActivity extends FragmentActivity {
+	
+	public FragmentActivity me = this;
+	
 	private final String TAG = "JAX";
 	private Activity mActivity = this;
 
@@ -50,12 +53,16 @@ public class AlarmReceiverActivity extends FragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);		
+		
+		
 		setContentView(R.layout.alarmreceiver_activity);
 		
 		stopAlarm = (Button) findViewById(R.id.stopAlarm);
 		stopAlarm.setOnClickListener(onClickListener);
 		
+		// 화면 OFF와 잠금을 뚫고 액티비티 띄우기
+		wakeUp();	
 		
 		jax = new Jax();
 		///////////////////////// 핸들러
@@ -67,8 +74,7 @@ public class AlarmReceiverActivity extends FragmentActivity {
 				super.handleMessage(msg);
 				
 				switch (msg.what) {
-				case 0:
-					Toast.makeText(getApplicationContext(), "완료", Toast.LENGTH_SHORT).show();
+				case 0:					
 					break;
 
 				default:
@@ -80,8 +86,7 @@ public class AlarmReceiverActivity extends FragmentActivity {
 		
 		matchPolling();
 		
-		// 화면 OFF와 잠금을 뚫고 액티비티 띄우기
-		wakeUp();		
+			
 		
 		
 		// 알람기능
@@ -114,8 +119,7 @@ public class AlarmReceiverActivity extends FragmentActivity {
 						mainHandler.sendMessage(retmsg);
 						
 						break;
-					}else{
-						Toast.makeText(getApplicationContext(), "상대 받아오기 실패", Toast.LENGTH_SHORT).show();
+					}else{						
 						break;
 					}
 				}
@@ -142,7 +146,7 @@ public class AlarmReceiverActivity extends FragmentActivity {
 						| WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
 						| WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-		Toast.makeText(getApplicationContext(), "알람입니다", Toast.LENGTH_LONG)
+		Toast.makeText(getApplicationContext(), "일어날 시간 입니다!", Toast.LENGTH_SHORT)
 				.show();
 	}
 	
@@ -174,10 +178,15 @@ public class AlarmReceiverActivity extends FragmentActivity {
 			case R.id.stopAlarm:				
 				vibrator.cancel();
 				
+				DialogFragment diaFrag = VoicechattingFrag.newInstance();				
+				diaFrag.show(fm, TAG);				
+				
+				/*
 				if(MatchInfo.available){
 					VoicechattingFrag.newInstance().show(fm, TAG);
 					//fm.beginTransaction().show(newFragment).commit();
 				}
+				*/
 				break;
 			}
 			

@@ -1,11 +1,14 @@
 package whitepaper.smcall;
 
 import whitepaper.smcall.alarm.AlarmStr;
+import whitepaper.smcall.db.SmcallDB;
 import whitepaper.smcall.remote.Utils;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
@@ -19,11 +22,32 @@ public class MorningCallActivity extends FragmentActivity {
 		setContentView(R.layout.morningcall_activity);
 		
 		AlarmStr.private_ip = Utils.getPrivateIP(mActivity);
-		/*
-		Intent i = new Intent("whitepaper.smcall");
-		i.putExtra("serv", "serv");
-		startService(i);
-		*/		
+		
+		SmcallDB	 scDB = new SmcallDB(getApplicationContext());
+		scDB.open();
+		
+		Cursor c = scDB.getAlarm();
+		if(c.getCount() > 0){
+			c.moveToFirst();
+			AlarmStr.time_hour		= Integer.valueOf(c.getString(0));
+			AlarmStr.time_minute	= Integer.valueOf(c.getString(1));
+			
+			Log.i("TIME", c.getString(0));
+			Log.i("TIME", c.getString(1));
+			
+			for(int i=2; i<9; i++){
+				AlarmStr.repeat[i-2] = Boolean.valueOf(c.getString(i));
+			}
+			
+			AlarmStr.type_sound = Boolean.valueOf(c.getString(9));
+			
+			AlarmStr.type_vibe	= Boolean.valueOf(c.getString(10));
+			
+			AlarmStr.alive		= Boolean.valueOf(c.getString(11));
+		}
+		
+		c.close();
+		scDB.close();
 	}
 
 	/*

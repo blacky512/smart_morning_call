@@ -1,6 +1,7 @@
 package whitepaper.smcall.db;
 
 
+import whitepaper.smcall.db.SmcallDB_Info.MornCallInfo;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,8 +27,8 @@ public class SmcallDB {
 		@Override
 		public void onCreate(SQLiteDatabase db){
 			db.execSQL(SmcallDB_Info.BaseInfo._CREATE);
-			/* @ 구현하도록
 			db.execSQL(SmcallDB_Info.MornCallInfo._CREATE);
+			/* @ 구현하도록			
 			db.execSQL(SmcallDB_Info.Friends._CREATE);			
 			db.execSQL(SmcallDB_Info.WithFriends._CREATE);
 			*/
@@ -103,6 +104,58 @@ public class SmcallDB {
 	public int getCnt(String tableName){
 		Cursor	c	= mDB.query(tableName, null, null, null, null, null, null);
 		return c.getCount();
+	}
+	
+	public Cursor getAlarm(){
+		return mDB.rawQuery("select hour, minute, rp0, rp1, rp2, rp3, rp4, rp5, rp6, type_sound, type_vibe, alive " +
+							"from morncallinfo",
+							null);
+	}
+	
+	public boolean setAlarm(String hour, String minute, boolean[] repeat,
+			boolean type_sound, boolean type_vibe, boolean alive) {
+		Cursor c = getAlarm();
+		
+		if (c.getCount() > 0) {
+			mDB.delete(SmcallDB_Info.MornCallInfo._TABLENAME, null, null);
+			Log.i("TIME", "삭제");
+		}
+		
+		ContentValues values = new ContentValues();
+
+		values.put(SmcallDB_Info.MornCallInfo.HOUR, hour);
+		values.put(SmcallDB_Info.MornCallInfo.MINUTE, minute);
+
+		for (int i = 0; i < repeat.length; i++) {
+			if (repeat[i]) {
+				values.put("rp" + i, "true");
+			} else {
+				values.put("rp" + i, "false");
+			}
+		}
+
+		if (type_sound) {
+			values.put(SmcallDB_Info.MornCallInfo.TYPE_SOUND, "true");
+		} else {
+			values.put(SmcallDB_Info.MornCallInfo.TYPE_SOUND, "false");
+		}
+
+		if (type_vibe) {
+			values.put(SmcallDB_Info.MornCallInfo.TYPE_VIBE, "true");
+		} else {
+			values.put(SmcallDB_Info.MornCallInfo.TYPE_VIBE, "false");
+		}
+
+		if (alive) {
+			values.put(SmcallDB_Info.MornCallInfo.ALIVE, "true");
+		} else {
+			values.put(SmcallDB_Info.MornCallInfo.ALIVE, "false");
+		}
+
+		mDB.insert(SmcallDB_Info.MornCallInfo._TABLENAME, null, values);
+		Log.i("TIME", "insert");
+
+		return true;
 	}
 	
 

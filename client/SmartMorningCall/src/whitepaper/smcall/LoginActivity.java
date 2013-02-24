@@ -150,5 +150,12 @@ public class LoginActivity extends Activity {
 			startActivity(launchHome);				
 		}
 	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		scDB.close();
+	}
 
 }

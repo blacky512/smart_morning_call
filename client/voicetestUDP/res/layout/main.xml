@@ -18,7 +18,7 @@
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="실행" />
+        android:text="-실행-" />
 
     <TextView
         android:id="@+id/info"
