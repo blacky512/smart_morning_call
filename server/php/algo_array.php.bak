@@ -46,8 +46,8 @@
 
 				$response['id']=$f_row[$i]['id'];
 				$response['secret']=$secret;
-				$response['ip_public']=$f_row[$i]['ip_public'];
-				$response['ip_virtual']=$f_row[$i]['ip_virtual'];
+//				$response['ip_public']=$f_row[$i]['ip_public'];
+//				$response['ip_virtual']=$f_row[$i]['ip_virtual'];
 				$response['call'] = 'true';
 
 				$response['result'] = 'true';
@@ -69,8 +69,8 @@
 
 				$response['id']=$m_row[$i]['id'];
 				$response['secret']=$secret;
-				$response['ip_public']=$m_row[$i]['ip_public'];
-				$response['ip_virtual']=$m_row[$i]['ip_virtual'];
+//				$response['ip_public']=$m_row[$i]['ip_public'];
+//				$response['ip_virtual']=$m_row[$i]['ip_virtual'];
 				$response['call'] = 'true';
 
 				$response['result'] = 'true';

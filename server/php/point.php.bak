@@ -13,12 +13,12 @@
 /*
 	$id='test';
 	$like = 1;
-	$x= '180';	// 180초 걸림
+	$x= '06:00:12';
 	$stamp = 1;
 */
 	$id = $temp['id'];
 	$like=$temp['like'];	// 상대의 좋아요 싫어요 
-	$x = $temp['x']; 	// 알람 수신까지 소요시간 
+	$x = $temp['x']; 	// 알람 수신시간 
 	$stamp=$temp['stamp'];	//전화 30초 유지 시간
 
 	$sql = "select time from random_db where id='".$id."'"; // 알람시간
@@ -61,20 +61,24 @@
 	}
 
 
+	// x와 time 변수 -> hour, minute 으로 쪼개기
+	$pattern=":";
+	$arr_x=split($pattern, $x);
+	$x_second=intval($arr_x[2]);
 	// 수신시간 - 알람 시간
-	if($x <= 10){
+	if($x_second <= 10){
 		$time_point = 10;
 	}
-	else if($x <= 30){
+	else if($x_second <= 30){
 		$time_point = 5;
 	}
-	else if($x <= 45){
+	else if($x_second <= 45){
 		$time_point = 3;
 	}
-	else if($x <= 59){
+	else if($x_second <= 59){
 		$time_point = 1;
 	}
-	else if(!$x){
+	else if(!$x_second){
 		$response['result']='false';
 		$response['message']='x_secon 받아오기 실패';
 		echo json_encode($response);
