@@ -62,7 +62,6 @@ $(document).ready(function(){
 	});
 
 
-/*
 	// 기존에 있던 알람 정보를 받아온다.
 
 	request_data['is_update']= 'false';
@@ -92,7 +91,5 @@ $(document).ready(function(){
 			console.log(error);
 		}	// end of error	
 	});	// end of ajax
-
-	*/
 
 });
