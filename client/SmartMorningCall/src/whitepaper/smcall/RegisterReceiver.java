@@ -25,8 +25,7 @@ public class RegisterReceiver extends BroadcastReceiver {
 			String[] values_onOff = { "id", AlarmStr.id,
 									  "onoff", "1" }; // ON
 			jax.sendJson(Mjpage.onOff, values_onOff);
-			
-			
+						
 			
 			Log.i("REG", "등록되었습니다");
 			String[] values_ip = { "id", AlarmStr.id, "ip_public",

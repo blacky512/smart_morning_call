@@ -37,10 +37,11 @@ public class SmcallDB {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 			db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.BaseInfo._TABLENAME);
 			db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.MornCallInfo._TABLENAME);
-			db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.Friends._TABLENAME);			
-			db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.WithFriends._TABLENAME);
+			//db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.Friends._TABLENAME);			
+			//db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.WithFriends._TABLENAME);
 			onCreate(db);
 		}
+		
 	}//데이터베이스헬퍼 끝
 	
 	public SmcallDB(Context context){
@@ -57,6 +58,14 @@ public class SmcallDB {
 	
 	public void close(){
 		mDB.close();
+	}
+	
+	public void removeDB(){		
+		mDB.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.BaseInfo._TABLENAME);
+		mDB.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.MornCallInfo._TABLENAME);
+		
+		mDB.execSQL(SmcallDB_Info.BaseInfo._CREATE);
+		mDB.execSQL(SmcallDB_Info.MornCallInfo._CREATE);
 	}
 	
 	

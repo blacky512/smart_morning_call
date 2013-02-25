@@ -18,6 +18,7 @@ import android.content.DialogInterface.OnDismissListener;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -42,6 +43,8 @@ public class RandomCallFrg extends Fragment {
 
 	private final String TAG = "RAN";
 	private static final int DIALOG_TIME = 0;
+	
+	public	Typeface	face;
 		
 	private Calendar	calendar;
 	
@@ -81,6 +84,7 @@ public class RandomCallFrg extends Fragment {
 			Bundle savedInstanceState) {
 
 		mView = inflater.inflate(R.layout.randomcall_frag, null, false);
+		face = Typeface.createFromAsset(getActivity().getAssets(), "font/08SEOULNAMSANL.TTF");
 		
 		btn_days[0] = (ImageButton)mView.findViewById(R.id.btn_mon);
 		btn_days[1] = (ImageButton)mView.findViewById(R.id.btn_tue);
@@ -105,6 +109,7 @@ public class RandomCallFrg extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		
 		
 		jax = new Jax();
 		init();
@@ -153,10 +158,12 @@ public class RandomCallFrg extends Fragment {
 	private void viewInit(){
 		
 		
-		tv2 = (TextView) mView.findViewById(R.id.textView2);
-		
-		tv4 = (TextView) mView.findViewById(R.id.textView4);
-		tv5 = (TextView) mView.findViewById(R.id.textView5);
+		tv2 = (TextView) mView.findViewById(R.id.rd_t1repet);
+		tv2.setTypeface(face);
+		tv4 = (TextView) mView.findViewById(R.id.rd_t2type);
+		tv4.setTypeface(face);
+		tv5 = (TextView) mView.findViewById(R.id.rd_t3set);
+		tv5.setTypeface(face);
 
 		//btn_setTime	= (Button) mView.findViewById(R.id.btn_settime);
 		//btn_setTime	.setOnClickListener(onClickListener);
@@ -278,11 +285,12 @@ public class RandomCallFrg extends Fragment {
         
     	if(now.getTimeInMillis() <= wakeup.getTimeInMillis()){
     		am.set(AlarmManager.RTC_WAKEUP, wakeup.getTimeInMillis()-5*1000, pi_reg);
-            am.set(AlarmManager.RTC_WAKEUP, wakeup.getTimeInMillis(), pi_get_up);		// 단말기에 알람 설정
+            am.set(AlarmManager.RTC_WAKEUP, wakeup.getTimeInMillis(), pi_get_up);		// 단말기에 알람 설정     
     	}else{
     		int oneday = 60 * 60 * 24 * 1000;
     		am.set(AlarmManager.RTC_WAKEUP, wakeup.getTimeInMillis()-5*1000 + oneday, pi_reg);
-            am.set(AlarmManager.RTC_WAKEUP, wakeup.getTimeInMillis() + oneday, pi_get_up);		// 단말기에 알람 설정
+            am.set(AlarmManager.RTC_WAKEUP, wakeup.getTimeInMillis() + oneday, pi_get_up);	// 단말기에 알람 설정
+         
     	}    	
         
         

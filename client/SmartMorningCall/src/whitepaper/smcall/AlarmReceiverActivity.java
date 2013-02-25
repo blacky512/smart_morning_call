@@ -1,5 +1,9 @@
 package whitepaper.smcall;
 
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import whitepaper.smcall.alarm.AlarmStr;
 import whitepaper.smcall.fragment.RandomCallFrg.TimePickerDialogFragment;
 import whitepaper.smcall.fragment.VoicechattingFrag;
@@ -26,6 +30,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -45,12 +50,17 @@ public class AlarmReceiverActivity extends FragmentActivity {
 	private PowerManager.WakeLock wl;
 	private Jax	jax;
 	
+	private TextView tvTime;
 	private Button stopAlarm;
 	private Vibrator vibrator;
+	private Timer	flowChecker;
 		
 	public Handler mainHandler;
 	
 	private DialogFragment diaFrag;
+
+	public int flowTime = 0;
+	
 	
 
 	@Override
@@ -60,15 +70,21 @@ public class AlarmReceiverActivity extends FragmentActivity {
 		
 		setContentView(R.layout.alarmreceiver_activity);
 		
-		stopAlarm = (Button) findViewById(R.id.stopAlarm);
-		stopAlarm.setOnClickListener(onClickListener);
+		stopAlarm 	= (Button) findViewById(R.id.stopAlarm);
+		stopAlarm	.setOnClickListener(onClickListener);
+		
+		tvTime		= (TextView) findViewById(R.id.flow);
 		
 		// 화면 OFF와 잠금을 뚫고 액티비티 띄우기
 		wakeUp();	
 		
 		jax = new Jax();
+		
+		
+		flowChecker = new Timer();
+		flowChecker.schedule(new Counter(), 0, 1000);
 		///////////////////////// 핸들러
-				
+						
 		mainHandler = new Handler(){
 			@Override
 			public void handleMessage(Message msg) {
@@ -76,7 +92,8 @@ public class AlarmReceiverActivity extends FragmentActivity {
 				super.handleMessage(msg);
 				
 				switch (msg.what) {
-				case 0:					
+				case 0:
+					tvTime.setText((String)msg.obj);
 					break;
 
 				default:
@@ -187,8 +204,14 @@ public class AlarmReceiverActivity extends FragmentActivity {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			switch (v.getId()){
-			case R.id.stopAlarm:				
-				vibrator.cancel();
+			case R.id.stopAlarm:
+			{
+				
+			}
+				vibrator.cancel();	
+				
+				flowChecker.cancel();
+				MatchInfo.response = String.valueOf(flowTime);
 				
 				stopAlarm.setVisibility(View.GONE);
 				
@@ -226,6 +249,28 @@ public class AlarmReceiverActivity extends FragmentActivity {
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
 		//super.onBackPressed();
+	}
+	
+	public class Counter extends TimerTask{
+		
+		int tv_min = 0;
+		int tv_sec = 0;
+		Message retmsg;
+		
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			tv_min = flowTime / 60;
+			tv_sec = flowTime % 60;
+
+			String ret = "+ "+String.format("%02d", tv_min) + " : "
+					   + String.format("%02d", tv_sec);
+			
+			retmsg = Message.obtain(mainHandler, 0, ret);
+			mainHandler.sendMessage(retmsg);
+			
+			flowTime++;
+		}
 	}
 	
 	public void afterConfirm(){

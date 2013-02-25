@@ -50,7 +50,7 @@
                     android:layout_weight="1" >
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/rd_t1repet"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -131,12 +131,12 @@
                     android:layout_weight="1" >
 
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/rd_t2type"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="0.6"
-                        android:text="알람 타입"
+                        android:text="알람타입"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:textColor="#a9a9a9" />
 
@@ -177,7 +177,7 @@
                     android:layout_weight="1" >
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/rd_t3set"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"

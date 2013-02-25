@@ -1,0 +1,45 @@
+package whitepaper.smcall.fragment;
+
+import whitepaper.smcall.R;
+import android.app.Activity;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
+
+public class JoinFrag extends DialogFragment{
+	
+	private View		mRoot;
+	private WebView		webview;
+	
+	public	Typeface			face;
+	
+
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+	}
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setCancelable(false);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		mRoot = inflater.inflate(R.layout.join_frag, container, false);
+		webview = (WebView) mRoot.findViewById(R.id.webView1);
+		face = Typeface.createFromAsset(getActivity().getAssets(), "font/08SEOULNAMSANL.TTF");
+		
+		return mRoot;
+	}
+	
+}

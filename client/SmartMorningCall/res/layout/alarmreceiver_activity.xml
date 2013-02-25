@@ -75,6 +75,15 @@
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/flow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="+ 00 : 00"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#adadad" />
+
         <FrameLayout
             android:layout_width="260dp"
             android:layout_height="80dp"

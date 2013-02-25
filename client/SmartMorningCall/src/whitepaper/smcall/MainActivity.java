@@ -10,11 +10,13 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.renderscript.Font.Style;
 import android.util.Log;
 import android.view.Window;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -24,7 +26,10 @@ public class MainActivity extends Activity {
 
 	public String id;
 	public String pw;
-
+	
+	public TextView mainText;
+	public Typeface	face;
+	
 	private Handler h;
 	private SmcallDB scDB;
 	private Cursor cs;
@@ -39,10 +44,14 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_activity);
+		
+		face = Typeface.createFromAsset(getAssets(), "font/08SEOULNAMSANL.TTF");
 
 		h = new Handler();
 		h.postDelayed(irun, 1500);	
 		
+		mainText = (TextView) findViewById(R.id.mainText);
+		mainText.setTypeface(face);
 	}
 
 
@@ -61,6 +70,9 @@ public class MainActivity extends Activity {
 
 			if (cs.getCount() == 1) { // 저장된 아이디 있음
 				// 저장된 아이디로 로그인 후 알람 액티비티로 이동
+				
+				mainText.setText("로그인 중 입니다.");
+				
 				Log.i(TAG, cs.toString());
 
 				Log.i(TAG, id = cs.getString(0));
@@ -77,12 +89,14 @@ public class MainActivity extends Activity {
 
 				if (Boolean.valueOf(jax.getValue(ret, "result"))) {
 					Log.i(TAG, "로그인성공");
+					mainText.setText("로그인 성공");
 					
 
 					nextActivity = MorningCallActivity.class;
 					
 				} else { // 로그인 실패
 					Log.i(TAG, "로그인 실패");
+					mainText.setText("로그인 실패");
 					Toast.makeText(getApplicationContext(), "로그인 실패",
 							Toast.LENGTH_SHORT).show();
 
@@ -90,8 +104,7 @@ public class MainActivity extends Activity {
 				}
 
 			} else {
-				Toast.makeText(getApplicationContext(), "계정없음", Toast.LENGTH_SHORT)
-						.show();
+				//Toast.makeText(getApplicationContext(), "계정없음", Toast.LENGTH_SHORT).show();
 				nextActivity = LoginActivity.class;
 			}
 			

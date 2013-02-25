@@ -11,6 +11,7 @@ public class AlarmStr {
 	// 시간
 	public static int			time_hour = -1;
 	public static int			time_minute = -1;
+	public static long			time_long	= 0;
 	
 	// 반복설정
 	public static boolean[]	repeat = new boolean[7];

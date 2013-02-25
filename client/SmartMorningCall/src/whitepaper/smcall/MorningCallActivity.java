@@ -2,20 +2,25 @@ package whitepaper.smcall;
 
 import whitepaper.smcall.alarm.AlarmStr;
 import whitepaper.smcall.db.SmcallDB;
+import whitepaper.smcall.fragment.JoinFrag;
+import whitepaper.smcall.fragment.ModifyFrag;
 import whitepaper.smcall.remote.Utils;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 public class MorningCallActivity extends FragmentActivity {
 	FragmentActivity mActivity = this;
 	boolean end = false;
-
+	SmcallDB	 scDB;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -23,7 +28,7 @@ public class MorningCallActivity extends FragmentActivity {
 		
 		AlarmStr.private_ip = Utils.getPrivateIP(mActivity);
 		
-		SmcallDB	 scDB = new SmcallDB(getApplicationContext());
+		scDB = new SmcallDB(getApplicationContext());
 		scDB.open();
 		
 		Cursor c = scDB.getAlarm();
@@ -50,6 +55,56 @@ public class MorningCallActivity extends FragmentActivity {
 		scDB.close();
 	}
 
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		
+		menu.add(0, 0, 0, "회원정보수정").setIcon(android.R.drawable.ic_menu_edit);
+		menu.add(0, 1, 0, "로그아웃").setIcon(android.R.drawable.ic_input_delete);
+				
+		return super.onCreateOptionsMenu(menu);
+		
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		FragmentManager fm = getSupportFragmentManager();
+		DialogFragment newFragment;
+		
+		switch (item.getItemId()) {
+		case 0:
+			newFragment = new ModifyFrag();
+			newFragment.show(fm, "modify");
+			
+			break;
+		case 1:
+			if(AlarmStr.alive){
+				Toast.makeText(getApplicationContext(), "먼저 모닝콜을 해제해 주세요.", Toast.LENGTH_SHORT).show();
+			}else{
+				scDB.open();
+				scDB.removeDB();
+				
+				try {
+					finalize();
+				} catch (Throwable e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				finish();	
+			}			
+			
+			break;
+
+		default:
+			break;
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
+	
 	/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

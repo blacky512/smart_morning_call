@@ -7,4 +7,6 @@ public class Mjpage {
 	public final static String algo_array 	= "http://211.189.127.30/morning_call/server/php/algo_array.php";
 	public final static String poll			= "http://211.189.127.30/morning_call/server/php/point.php";
 	public final static String onOff		= "http://211.189.127.30/morning_call/server/php/onoff.php";
+	public final static String join			= "http://211.189.127.30/morning_call/server/join.html";
+	public final static String modify		= "http://211.189.127.30/morning_call/server/modify.html";
 }
