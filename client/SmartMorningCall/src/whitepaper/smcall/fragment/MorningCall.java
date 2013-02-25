@@ -123,7 +123,7 @@ public class MorningCall extends Fragment implements OnTabChangeListener {
                 .commit();        	
         	}else if(tabId == TAB_FRIENDSCALL){
         		fm.beginTransaction()
-                .replace(placeholder, new FriendsCallFrg(), tabId)
+                .replace(placeholder, new RecordFrag(), tabId)
                 .commit();
         	}        	
         }        

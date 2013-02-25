@@ -1,11 +1,15 @@
 package whitepaper.smcall.fragment;
 
+import java.util.Calendar;
+
 import whitepaper.smcall.R;
 import whitepaper.smcall.alarm.AlarmStr;
+import whitepaper.smcall.db.SmcallDB;
 import whitepaper.smcall.remote.Jax;
 import whitepaper.smcall.remote.MatchInfo;
 import whitepaper.smcall.remote.Mjpage;
 import android.app.Activity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -21,6 +25,8 @@ public class PollFrg extends DialogFragment{
 	
 	private RelativeLayout laybtnLike;
 	private RelativeLayout laybtnDislike;
+	
+	private SmcallDB scDB;
 	
 	@Override
 	public void onAttach(Activity activity) {
@@ -38,6 +44,8 @@ public class PollFrg extends DialogFragment{
 		setCancelable(false);
 		
 		jax = new Jax();
+		scDB = new SmcallDB(getActivity());
+		scDB.open();
 	}
 	
 	
@@ -91,15 +99,40 @@ public class PollFrg extends DialogFragment{
 			ret_like = "-1";
 		}
 		
-		
-		String[] values= {
-				"id", AlarmStr.id,						// ID
-				"opposite_id", MatchInfo.opposite_id,	// 상대 아이디
-				"like", ret_like, 						// Like or Dislike (-1 ~ 1)
-				"stamp", MatchInfo.stamp,				// 30초 이상 대화는 1, 미만은 0
-				"x", MatchInfo.response					// 응답시간 (몇초만에 일어났나?)
+		String ret_likeOrDislike;
+		String[] values_like= {
+				"id",		AlarmStr.id,			// ID				
+				"ur_id",	MatchInfo.opposite_id,	// 상대 아이디
+				"love",		ret_like
 		};
-		jax.sendJson(Mjpage.poll, values);
+		ret_likeOrDislike = jax.sendJson(Mjpage.likeOrDislike, values_like);
+		
+		String ret_report;
+		String[] values_report= {
+				"id",		AlarmStr.id,
+				"x",		MatchInfo.response,
+				"stamp",	MatchInfo.stamp,				
+		};
+		ret_report = jax.sendJson(Mjpage.report, values_report);
+		String today_point = jax.getValue(ret_report, "today_point");
+		
+		Cursor cs = scDB.getAlarm();
+		cs.moveToFirst();
+		
+		Calendar cal = Calendar.getInstance();
+		
+		scDB.insertRecord(String.valueOf(cal.get(Calendar.MONTH)), 
+				          String.valueOf(cal.get(Calendar.DATE)), 
+						  cs.getString(0), 
+						  cs.getString(1),
+						  today_point, 
+						  "?");
+		
+		/*
+		 * "like", ret_like, 						// Like or Dislike (-1 ~ 1)
+		   "stamp", MatchInfo.stamp,				// 30초 이상 대화는 1, 미만은 0
+			"x", MatchInfo.response					// 응답시간 (몇초만에 일어났나?)
+		 */
 		
 		return true;
 	}

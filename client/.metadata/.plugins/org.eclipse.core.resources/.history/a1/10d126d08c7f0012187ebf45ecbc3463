@@ -1,0 +1,52 @@
+package whitepaper.smcall.fragment;
+
+import whitepaper.smcall.R;
+import whitepaper.smcall.remote.Jax;
+import android.app.Activity;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+
+public class RecordFrag extends Fragment{
+	
+	public Fragment me = this;
+	
+	private View		mView;
+	private ListView	listView;
+	
+	private Jax jax;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+
+		mView		= inflater.inflate(R.layout.records_frag, null, false);
+		listView	= (ListView) mView.findViewById(R.id.listView1);
+		
+		
+		//return super.onCreateView(inflater, container, savedInstanceState);
+		return mView;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		
+		jax = new Jax();
+		
+	}
+
+
+}

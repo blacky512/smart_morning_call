@@ -63,6 +63,31 @@ public class SmcallDB_Info implements BaseColumns{
 				+");";
 	}
 	
+	public static class Records{
+		// Colums
+		public static String MONTH		= "month";
+		public static String DATE		= "date";
+		
+		public static String HOUR		= "hour";
+		public static String MINUTE		= "minute";
+		
+		public static String POINT		= "point";
+		public static String LODL		= "lodl";
+						
+		public static final String _TABLENAME	= "records";
+		
+		public static final String _CREATE		= 
+				"create table " + _TABLENAME
+				+ "("+ _ID +" integer primary key autoincrement, "
+				+ MONTH + " text not null, "				
+				+ DATE + " text not null, "
+				+ HOUR + " text not null, "
+				+ MINUTE + " text not null, "
+				+ POINT + " text not null, "
+				+ LODL + " text"				
+				+");";
+	}
+	
 	// 친구 테이블
 	public static class Friends{
 		public static final String _TABLENAME	= "friends";

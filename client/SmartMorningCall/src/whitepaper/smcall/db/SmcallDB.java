@@ -28,6 +28,7 @@ public class SmcallDB {
 		public void onCreate(SQLiteDatabase db){
 			db.execSQL(SmcallDB_Info.BaseInfo._CREATE);
 			db.execSQL(SmcallDB_Info.MornCallInfo._CREATE);
+			db.execSQL(SmcallDB_Info.Records._CREATE);
 			/* @ 구현하도록			
 			db.execSQL(SmcallDB_Info.Friends._CREATE);			
 			db.execSQL(SmcallDB_Info.WithFriends._CREATE);
@@ -37,6 +38,7 @@ public class SmcallDB {
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){
 			db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.BaseInfo._TABLENAME);
 			db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.MornCallInfo._TABLENAME);
+			db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.Records._TABLENAME);
 			//db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.Friends._TABLENAME);			
 			//db.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.WithFriends._TABLENAME);
 			onCreate(db);
@@ -63,9 +65,11 @@ public class SmcallDB {
 	public void removeDB(){		
 		mDB.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.BaseInfo._TABLENAME);
 		mDB.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.MornCallInfo._TABLENAME);
+		mDB.execSQL("DROP TABLE IF EXISTS " + SmcallDB_Info.Records._TABLENAME);
 		
 		mDB.execSQL(SmcallDB_Info.BaseInfo._CREATE);
 		mDB.execSQL(SmcallDB_Info.MornCallInfo._CREATE);
+		mDB.execSQL(SmcallDB_Info.Records._CREATE);
 	}
 	
 	
@@ -167,5 +171,25 @@ public class SmcallDB {
 		return true;
 	}
 	
+	public boolean insertRecord(String month, String date, String hour, String minute, String point, String lodl){
+				
+		ContentValues values = new ContentValues();
+		values.put(SmcallDB_Info.Records.MONTH, month);
+		values.put(SmcallDB_Info.Records.DATE, date);
+		values.put(SmcallDB_Info.Records.HOUR, hour);
+		values.put(SmcallDB_Info.Records.MINUTE, minute);
+		values.put(SmcallDB_Info.Records.POINT, point);
+		values.put(SmcallDB_Info.Records.LODL, lodl);
+		
+		mDB.insert(SmcallDB_Info.Records._TABLENAME, null, values);
+		//Log.i(TAG, id+" : "+pw+" 저장되었음");
+		
+		return true;
+	}
+	
+	public Cursor getRecord(){
+		return mDB.rawQuery("select month, date, hour, minute, point, lodl "+
+							"from records", null);
+	}
 
 }
