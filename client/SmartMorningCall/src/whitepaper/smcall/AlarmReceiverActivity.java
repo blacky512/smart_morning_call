@@ -50,6 +50,8 @@ public class AlarmReceiverActivity extends FragmentActivity {
 		
 	public Handler mainHandler;
 	
+	private DialogFragment diaFrag;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,8 +114,18 @@ public class AlarmReceiverActivity extends FragmentActivity {
 				while(true){					
 					ret = jax.sendJson(Mjpage.algo_array, values);
 					if(Boolean.valueOf(jax.getValue(ret, "call"))){
-						MatchInfo.match_private_Ip = jax.getValue(ret, "ip_virtual");
-						MatchInfo.available = true;
+						MatchInfo.match_private_Ip 	= jax.getValue(ret, "ip_virtual");
+						MatchInfo.available 		= true;
+						
+						//@ 상대 아이디, 성별 받기
+						/*
+						 * MatchInfo.opposite_id	= jax.getValue(ret, "");
+						 * MatchInfo.opposite_sex	= jax.getValue(ret, "");
+						 * 
+						 * @ voicecallfrag 성별 구분 업데이트
+						 * @ pollfrag 상대 아이디 적어서 결과 전송
+						 */
+						
 						// 연결처리
 						Message retmsg = Message.obtain(mainHandler, 0);			
 						mainHandler.sendMessage(retmsg);
@@ -180,8 +192,9 @@ public class AlarmReceiverActivity extends FragmentActivity {
 				
 				stopAlarm.setVisibility(View.GONE);
 				
-				DialogFragment diaFrag = VoicechattingFrag.newInstance();				
-				diaFrag.show(fm, TAG);				
+				diaFrag = VoicechattingFrag.newInstance();				
+				diaFrag.show(fm, TAG);			
+				
 				
 				/*
 				if(MatchInfo.available){
@@ -216,11 +229,37 @@ public class AlarmReceiverActivity extends FragmentActivity {
 	}
 	
 	public void afterConfirm(){
-		Toast.makeText(getApplicationContext(), "나오네?", Toast.LENGTH_SHORT).show();
+		
+		diaFrag.onDestroy();
+		diaFrag.onDetach();
+		
+		try {
+			finalize();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finish();
+		//@ 상대 평가창 띄우기
+		
 	}
 	
 	public void afterCancel(){
+		
+		diaFrag.onDestroy();
+		diaFrag.onDetach();
+		
+		try {
+			finalize();
+		} catch (Throwable e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		finish();
+	}
+	
+	public void afterPoll(){
+		
 	}
 		
 	

@@ -207,6 +207,9 @@ public class RandomCallFrg extends Fragment {
 			        setAlarm();
 				}else{					// 사용안함
 					// 알람해제
+					String[] values_onOff = { "id", AlarmStr.id,
+											  "onoff", "0" }; // OFF
+					jax.sendJson(Mjpage.onOff, values_onOff);
 					
 					cancleAlarm();
 				}

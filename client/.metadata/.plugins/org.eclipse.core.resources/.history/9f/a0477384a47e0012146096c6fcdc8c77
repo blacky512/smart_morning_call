@@ -1,0 +1,7 @@
+package whitepaper.smcall.fragment;
+
+import android.app.Fragment;
+
+public class PollFrg extends Fragment{
+
+}

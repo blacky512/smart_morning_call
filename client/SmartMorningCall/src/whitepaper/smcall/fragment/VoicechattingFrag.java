@@ -164,8 +164,7 @@ public class VoicechattingFrag extends DialogFragment {
 					
 					
 					timer.cancel();
-					
-					
+					vc.timer.cancel();					
 					vc.RecvAudioSetListenable(false);
 					
 					vc.StopAudio();
@@ -177,12 +176,14 @@ public class VoicechattingFrag extends DialogFragment {
 					break;
 					
 				case 2:	// 패킷 리시브 성공 (이제부터 대화시작)
+					vc_info.setText("연결되었습니다. 상대를 깨워주세요!");
 					vc.RecvAudioSetListenable(true);
 					timer.schedule(new VoiceChatTimer(mainHandler), 0, 1000);
 					break;
 					
 				case 3: // 패킷 오지 않음 (상대에서 접속 종료함)
 					
+					vc_info.setText("상대가 연결을 끊었습니다.");
 					//vc_cut.setEnabled(false);
 					layBtn1.setEnabled(false);
 					vc_cut.setBackgroundResource(R.drawable.jhk_cut_04);
@@ -193,7 +194,7 @@ public class VoicechattingFrag extends DialogFragment {
 
 					Toast.makeText(getActivity(), "상대가 대화를 종료했습니다.", Toast.LENGTH_SHORT).show();
 					
-					timer.cancel();
+					timer.cancel();					
 					vc.StopAudio();
 					vc.StopMicAudio();
 					
@@ -232,8 +233,7 @@ public class VoicechattingFrag extends DialogFragment {
 		}else{
 			vc_info.setText("모닝콜 상대가 없습니다. ㅠㅠ");
 			layBtn3.setEnabled(true);
-			vc_cancel.setBackgroundResource(R.drawable.jhk_cancel_);
-			
+			vc_cancel.setBackgroundResource(R.drawable.jhk_cancel_);			
 		}
 		
 		return mRoot;
@@ -264,6 +264,8 @@ public class VoicechattingFrag extends DialogFragment {
 			//case R.id.voicechat_cut:
 			case R.id.layBtn1:
 				
+				vc_info.setText("대화가 종료되었습니다.");
+				
 				//vc_cut.setEnabled(false);
 				layBtn1.setEnabled(false);
 				vc_cut.setBackgroundResource(R.drawable.jhk_cut_04);
@@ -283,6 +285,14 @@ public class VoicechattingFrag extends DialogFragment {
 				break;
 			//case R.id.voicechat_confirm:
 			case R.id.layBtn2:
+				
+				//@ 30초 이상 대화 햇다면 stamp
+				if(time_sec >= 30){
+					MatchInfo.stamp = "1";
+				}else{
+					MatchInfo.stamp = "0";
+				}
+				
 				
 				dismiss();				
 				((AlarmReceiverActivity) getActivity()).afterConfirm();
@@ -304,13 +314,13 @@ public class VoicechattingFrag extends DialogFragment {
 		}
 	};
 	
-
+	private int time_sec;
 	public class VoiceChatTimer extends TimerTask {
 
 		Handler mainHandler;
 
 
-		int time_sec = 0;
+		
 
 		int tv_min = 0;
 		int tv_sec = 0;
@@ -319,7 +329,7 @@ public class VoicechattingFrag extends DialogFragment {
 
 		public VoiceChatTimer(Handler mainHandler) {
 			this.mainHandler	= mainHandler;
-		
+			time_sec = 0;		
 		}
 
 		@Override

@@ -3,6 +3,12 @@ package whitepaper.smcall.remote;
 public class MatchInfo {
 	public static boolean available = false; 
 	
+	public static String opposite_id	= "unknown";
+	public static String opposite_sex;
+	
+	public static String response;
+	public static String stamp;
+	
 	public static String match_private_Ip;
 	public static int	 match_private_port = 7771;
 	

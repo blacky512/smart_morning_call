@@ -21,7 +21,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout1"
-        android:layout_width="310dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/timelayer"
         android:layout_centerHorizontal="true"

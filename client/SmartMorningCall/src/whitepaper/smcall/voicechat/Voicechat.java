@@ -135,6 +135,7 @@ public class Voicechat {
     public class RecvThread extends Thread{
 		boolean available = true;
 		boolean listenable = false;
+		DatagramSocket sock;
 		AudioTrack track;
 		
 		@Override
@@ -151,7 +152,7 @@ public class Voicechat {
                 track.play();
                 try
                 {
-                    DatagramSocket sock = new DatagramSocket(AUDIO_PORT);
+                    sock = new DatagramSocket(AUDIO_PORT);
                     byte[] buf = new byte[BUF_SIZE];
 
                     boolean firstRecv = true;
@@ -193,8 +194,9 @@ public class Voicechat {
 			
 		}
 		
-		private void kill(){
+		private void kill(){			
 			available = false;
+			sock.close();
 			
 			if( track.getState() == AudioTrack.STATE_INITIALIZED ){
 				track.stop();

@@ -1,0 +1,43 @@
+package whitepaper.smcall;
+
+import whitepaper.smcall.alarm.AlarmStr;
+import whitepaper.smcall.remote.Jax;
+import whitepaper.smcall.remote.Mjpage;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
+public class RegisterReceiver extends BroadcastReceiver {
+	Jax jax = new Jax();
+
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		// TODO Auto-generated method stub
+
+		String[] values = { "id", AlarmStr.id, "hour",
+				String.valueOf(AlarmStr.time_hour), "minute",
+				String.valueOf(AlarmStr.time_minute) };
+		String ret = jax.sendJson(Mjpage.set_alarm, values);
+
+		if (Boolean.valueOf(jax.getValue(ret, "result"))) {
+			
+			String[] values_onOff = { "id", AlarmStr.id,
+									  "onoff", "1" };
+			
+			
+			
+			Log.i("REG", "등록되었습니다");
+			String[] values_ip = { "id", AlarmStr.id, "ip_public",
+					"000.000.000.000", "ip_virtual", AlarmStr.private_ip };
+			jax.sendJson(Mjpage.algo_update, values_ip);
+
+		} else {
+			Log.i("REG", "등록실패");
+
+		}
+
+		Log.i("REG", ret);
+	} 
+
+}
