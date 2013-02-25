@@ -22,7 +22,7 @@ $(document).ready(function(){
 				console.log("result:"+result);
 				if(result.result=="true"){
 					alert(result.message);
-					window.location.href='./random.html';
+					//window.location.href='./random.html';
 				}
 				else{
 					alert(result.message);

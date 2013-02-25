@@ -57,7 +57,7 @@
 <fullyQualifiedTypeName name="android.widget.Button"/>
 <fullyQualifiedTypeName name="android.widget.ImageView"/>
 <fullyQualifiedTypeName name="android.view.View.OnClickListener"/>
-<fullyQualifiedTypeName name="whitepaper.smcall.R.id"/>
 <fullyQualifiedTypeName name="java.util.Timer"/>
 <fullyQualifiedTypeName name="whitepaper.smcall.voicechat.Voicechat.RecvStateChecker"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.R.id"/>
 </qualifiedTypeNameHistroy>
