@@ -1,0 +1,62 @@
+<?php
+	session_start();
+?>
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title> random.html</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript", src="./js/random.js"></script>
+
+<!--		<link href="./style.css" rel="stylesheet" type="text/css"/>	 -->	
+	</head>	
+	<body>
+		<font face='comic sans MS'>		
+		<h1> random.html </h1>
+
+		<table>
+			<tr>
+				<td align="right">
+					<input type="text", value="<?=$_SESSION['id']?>">
+				</td>
+				<td align="right">
+					<input type="button", id="modify_btn", value="Modify">					
+					<input type="button", id="logout_btn", value="Logout">
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+					<input type="button", id="random_btn", value="Random Mode">
+				</td>
+				<td align="right">
+					<input type="button", id="friends_btn", value="Friends Mode">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2">
+					<select id="hour", name="hour">
+						<option value="" checked>시</option>
+						<? for($h=0; $h<24; $h++){ ?>
+						<option value="<?=$h?>"> <?=$h?> </option>
+						<?}?>
+					</select> : 
+					<select id="minute", name="minute">
+						<option value="" checked>분</option>
+						<? for($m=0; $m<60; $m = $m+10){ ?>
+						<option value="<?=$m?>"> <?=$m?> </option>
+						<?}?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">
+					<input type="button", id="random_set_btn", value="Set">
+				</td>				
+				<td align="right">
+					&nbsp; &nbsp;
+				</td>
+			</tr>
+		</table>	
+	</body>
+</html>

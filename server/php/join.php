@@ -3,9 +3,9 @@
 	session_start();
 	include "./connect.php";
 
-//	$temp = json_decode(file_get_contents('php://input') , true);
+	$temp = json_decode(file_get_contents('php://input') , true);
 //	print_r($temp);
-	$temp = $_POST;
+//	$temp = $_POST;
 
 	$id=$temp['id'];
 	$pw=$temp['pw'];
@@ -13,8 +13,6 @@
 	$sex=$temp['sex'];
 	$age=$temp['age'];
 
-	$acc=0;
-	$point=0;
 
 	$response=array();
 
@@ -42,29 +40,10 @@
 		exit;		
 	}
 
-	// 남녀 비율 1:1 로 관리자 승인
-	$m_sql="select COUNT(*) c from random_db where sex='1'";
-	$m_row=mysql_fetch_array($m_sql);
-	$m_count=$m_row['c'];
 
-	$f_sql="select COUNT(*) c from random_db where sex='0'";
-	$f_row=mysql_fetch_array($m_sql);
-	$f_count=$f_row['c'];
-
-	if($m_count == $f_count){
-		$acc =0;
-	}
-	else if( $m_count < $f_count){
-		if($sex == '0'){ $acc =0;}
-		if($sex == '1'){ $acc =1;}
-	}
-	else if( $m_count > $f_count){
-		if($sex == '0'){ $acc=1;}
-		if($sex == '1'){ $acc=0;}
-	}
-
-	$query="insert into random_db(id, pw, acc, point, sex, age, ip_public, time, ip_virtual, onoff) 
-					value('$id','$pw', '$acc', '$point', '$sex', '$age', '$ip_public', '$time', '$ip_virtual', '$onoff')";
+	$query="insert into random_db(id, pw, point, sex
+		, age, ip_public, time, ip_virtual, onoff) 
+					value('$id','$pw', '$point', '$sex', '$age', '$ip_public', '$time', '$ip_virtual', '$onoff')";
 	$k=mysql_query($query);
 
 	$_SESSION['id']=$id;

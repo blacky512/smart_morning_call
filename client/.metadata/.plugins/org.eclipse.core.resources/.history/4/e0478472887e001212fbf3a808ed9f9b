@@ -1,0 +1,67 @@
+package whitepaper.smcall.webview;
+
+import whitepaper.smcall.R;
+import whitepaper.smcall.R.layout;
+import whitepaper.smcall.R.menu;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Context;
+import android.view.Menu;
+import android.view.KeyEvent;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+public class WebViewActivity extends Activity {
+
+	private WebView mWebView;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_web_view);
+		
+		setLayout();
+		
+		mWebView.getSettings().setJavaScriptEnabled(true); 
+	    mWebView.setWebChromeClient(new WebViewClientClass());  
+	    
+	    mWebView.addJavascriptInterface(new JavaScriptInterface(this), "android");
+
+	    mWebView.loadUrl("http://112.108.39.254/smart_morning_call/server/join.html");
+		
+	}
+	
+	public class JavaScriptInterface{
+        Context mContext;
+        JavaScriptInterface(Context c){
+         mContext = c;
+        }
+        public void webview_finish(){
+         finish();
+        }
+	}
+	
+	@Override 
+    public boolean onKeyDown(int keyCode, KeyEvent event) { 
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) { 
+            mWebView.goBack(); 
+            return true; 
+        } 
+        return super.onKeyDown(keyCode, event);
+    }
+    
+    private class WebViewClientClass extends WebChromeClient { 
+        public boolean shouldOverrideUrlLoading(WebView view, String url) { 
+            view.loadUrl(url); 
+            return true; 
+        } 
+    }
+	
+	/*
+	 * Layout
+	 */
+	private void setLayout(){
+		mWebView = (WebView) findViewById(R.id.webview);
+	}
+}

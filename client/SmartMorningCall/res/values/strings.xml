@@ -9,5 +9,6 @@
     <string name="tab_friendscall">F_Call</string>
     <string name="title_activity_random_call">RandomCallActivity</string>
     <string name="title_activity_alarm_receiver">AlarmReceiverActivity</string>
+    <string name="title_activity_webview">WebviewActivity</string>
 
 </resources>

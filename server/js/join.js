@@ -18,7 +18,7 @@ $(document).ready(function(){
 				console.log(result);
 				if(result.result=="true"){
 					alert(result.message);
-					window.location.href='./random.html';					
+					window.android.webview_finish();				
 				}
 				else{
 					alert(result.message);

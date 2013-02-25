@@ -38,6 +38,7 @@
 <fullyQualifiedTypeName name="android.os.Message"/>
 <fullyQualifiedTypeName name="android.widget.Button"/>
 <fullyQualifiedTypeName name="android.widget.ImageView"/>
+<<<<<<< HEAD
 <fullyQualifiedTypeName name="java.util.Timer"/>
 <fullyQualifiedTypeName name="whitepaper.smcall.voicechat.Voicechat.RecvStateChecker"/>
 <fullyQualifiedTypeName name="whitepaper.smcall.fragment.RandomCallFrg"/>
@@ -60,4 +61,10 @@
 <fullyQualifiedTypeName name="whitepaper.smcall.R.id"/>
 <fullyQualifiedTypeName name="whitepaper.smcall.remote.Jax"/>
 <fullyQualifiedTypeName name="whitepaper.smcall.remote.Mjpage"/>
+=======
+<fullyQualifiedTypeName name="android.view.View.OnClickListener"/>
+<fullyQualifiedTypeName name="java.util.Timer"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.voicechat.Voicechat.RecvStateChecker"/>
+<fullyQualifiedTypeName name="whitepaper.smcall.R.id"/>
+>>>>>>> 5701a92071c4f10ae97f38ea45dc9ce16866ad2f
 </qualifiedTypeNameHistroy>
