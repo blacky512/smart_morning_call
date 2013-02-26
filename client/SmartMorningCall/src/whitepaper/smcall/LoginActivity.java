@@ -79,16 +79,13 @@ public class LoginActivity extends FragmentActivity {
         cookieManager = CookieManager.getInstance();
         CookieSyncManager.getInstance().startSync();
         
-        setSyncCookie();
-        
-        
 	}
 	
 	public void setSyncCookie() {
         Log.e("surosuro", "token transfer start ---------------------------");
         try {
             List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-            nameValuePairs.add(new BasicNameValuePair("token", "TEST"));// 넘길 파라메터 값셋팅token=TEST
+            nameValuePairs.add(new BasicNameValuePair("id", AlarmStr.id));// 넘길 파라메터 값셋팅token=TEST
                 
             HttpParams params = new BasicHttpParams();
             
@@ -197,6 +194,8 @@ public class LoginActivity extends FragmentActivity {
 					scDB.initAccount();
 					scDB.insertAccount(id, pw);
 					AlarmStr.id = id;
+					
+					setSyncCookie();
 					
 					Intent i = new Intent(LoginActivity.this, MorningCallActivity.class);
 					startActivity(i);					

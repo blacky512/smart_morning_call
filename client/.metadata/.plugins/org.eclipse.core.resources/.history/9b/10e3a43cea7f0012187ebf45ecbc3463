@@ -1,0 +1,84 @@
+package whitepaper.smcall.fragment;
+
+import java.util.ArrayList;
+
+import whitepaper.smcall.R;
+import whitepaper.smcall.db.SmcallDB;
+import whitepaper.smcall.remote.Jax;
+import android.app.Activity;
+import android.database.Cursor;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+public class RecordFrag extends Fragment{
+	
+	public Fragment me = this;
+	
+	private View		mView;
+	private ListView	listView;
+	
+	private Jax jax;
+	private SmcallDB scDB;
+	
+	@Override
+	public void onAttach(Activity activity) {
+		// TODO Auto-generated method stub
+		super.onAttach(activity);
+	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+
+		mView		= inflater.inflate(R.layout.records_frag, null, false);
+		listView	= (ListView) mView.findViewById(R.id.listView1);
+		
+		
+		//return super.onCreateView(inflater, container, savedInstanceState);
+		return mView;
+	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		
+		jax 	= new Jax();
+		scDB 	= new SmcallDB(getActivity());
+		scDB	.open();
+		
+		ArrayList<String> arr = new ArrayList<String>();
+		
+		Cursor c = scDB.getRecord();
+		c.moveToFirst();
+		
+		for(int i = 0; i < c.getCount(); i++){
+			String rec = c.getString(0)+"월 "+c.getString(1)+"일"+
+						 c.getString(2)+"시 "+c.getString(3)+"분"+
+						 c.getString(4);
+			
+			arr.add(rec);
+		}
+		
+		arr.add("1월 1일 1시 1분 ?");
+		arr.add("1월 1일 1시 1분 ?");
+		arr.add("1월 1일 1시 1분 ?");
+		arr.add("1월 1일 1시 1분 ?");
+				
+		
+		ArrayAdapter<String> aa = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_2, arr);
+		
+		listView.setAdapter(aa);
+		
+	}
+
+
+}
+

@@ -1,5 +1,4 @@
 INDEX VERSION 1.126+C:\Users\Administrator\smart_morning_call\client\.metadata\.plugins\org.eclipse.jdt.core
-3377066645.index
 1390313220.index
 1697796177.index
 3027688941.index

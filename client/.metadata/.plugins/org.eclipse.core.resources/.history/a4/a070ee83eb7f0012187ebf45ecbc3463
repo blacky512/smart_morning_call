@@ -1,0 +1,253 @@
+package voice.tUDP;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.StringTokenizer;
+
+import android.annotation.SuppressLint;
+import android.util.Log;
+import de.javawi.jstun.util.Address;
+
+public class JaxTurnClients {
+	private Address getAddr = null;
+	private int getPort = 0;
+	String serverAddr;
+	private int serverPort;
+	private int serverPort2;
+	
+	private String yourAddr;
+	private int yourPort1;
+	private int yourPort2;
+	
+	private final int BindingErrorRequest=0;
+	private final int BindingRequest=1;
+	private final int BindingResponse=2;
+	private final int SharedSecretError=3;
+	private final int SharedSecretRequest=4;
+	private final int SharedSecretResponse=5;
+	private final int WaitPlease=6;
+	private final int DeleteMyInfo=7;
+	private final int HolePunching=9;
+	// ///////////////////////////////////////////////////////////////////////////////////////////
+
+	public JaxTurnClients() {
+		this.serverAddr = "211.189.127.205";
+		this.serverPort = 7771;
+		this.serverPort2= 7772;
+	}
+
+	public JaxTurnClients(final String serverAddr, final int serverPort , final int serverPort2) {
+		this.serverAddr = serverAddr;
+		this.serverPort = serverPort;
+		this.serverPort2 = serverPort2;
+	}
+
+	public String getNATAddr(){
+		//상대방 NAT의 주소 또는 공인주소
+		return yourAddr;
+	}
+	
+	public InetAddress getNATInetAddr(){
+		//상대방 NAT의 주소 또는 공인주소
+		InetAddress inetServerAddr = null;
+		try {
+			inetServerAddr = InetAddress.getByName(yourAddr);
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return inetServerAddr;
+	}
+	
+	public int getNATHeardPort(){
+		//상대방 NAT가 듣고있는 주소 또는 상대방이 듣고있는 주소
+		return yourPort1;
+	}
+	
+	public int getNATSentPort(){
+		//상대방 NAT가 보내고 있는 주소 또는 상대방이 보내고 있는 주소
+		return yourPort2;
+	}
+	
+
+	public boolean isBinding() {
+		if (getAddr != null && getPort != 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public DatagramPacket strToPack(String msg,InetAddress address,int port ){
+		
+		DatagramPacket pack=null;
+		try {
+			pack = new DatagramPacket(msg.getBytes("utf-8"),msg.getBytes("utf-8").length, address, port);
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pack;
+	}
+	
+	public String packToStr(DatagramPacket dp){
+		
+		String str=new String(dp.getData());
+		return str;
+	}
+    public void jaxPoof(final DatagramPacket pack) {
+						
+						byte[] packb = pack.getData();
+						
+						String str = new String(packb); //b는 바이트배열 
+
+						Log.i("jaxPoof",str);
+						byte[] c = str.getBytes();
+
+						String str2=new String(c);
+						Log.i("jaxPoof",str2);
+	}		
+	
+    public String packIsLive(String str,int size){
+    	try {
+    	if(str.getBytes("utf-8").length<size){
+    		Log.i("JAXTURN",str+" 의 바이트 크기가 "+size+"보다 작습니다. Before : "+str.getBytes("utf-8").length);
+			while(str.length()!=size){ //true면 계속실행
+				str+="#";
+				
+			}
+			Log.i("JAXTURN","After  : "+str+" , "+str.getBytes().length);
+    	} else if(str.getBytes("utf-8").length>size){
+					Log.i("JAXTURN",str+" 의 바이트 크기가 "+size+"보다 큽니다. Before : "+str.getBytes("utf-8").length);
+					str.substring(0, size);
+				}
+    	Log.i("JAXTURN","After  : "+str+" , "+str.getBytes().length);
+    	return str;
+    	
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				Log.i("JaxTurn",e.toString());
+			}
+    	return null;
+    	
+    }
+    
+    
+	@SuppressLint("UseValueOf")
+	public void jaxOcket(String myID ,String md5NID) throws SocketException {
+		final DatagramSocket sendNRecv = new DatagramSocket(serverPort); // Default : 7771
+		final DatagramSocket sendNSend = new DatagramSocket(serverPort2); // Default : 7772
+
+			try {
+		
+			InetAddress inetServerAddr=InetAddress.getByName(serverAddr);
+			/////////////패킷 크기 설정
+		
+		
+			String Header=new Integer(BindingRequest).toString(); 
+			String data=Header+packIsLive(md5NID,32)+packIsLive(myID,16);
+			
+			Log.i("JAXTURN","보낼 데이터 : "+data);
+			DatagramPacket serverSendPack=new DatagramPacket(data.getBytes("utf-8"),data.getBytes("utf-8").length, inetServerAddr, serverPort);
+			DatagramPacket serverSendPack2=new DatagramPacket(data.getBytes("utf-8"),data.getBytes("utf-8").length, inetServerAddr, serverPort2);
+			DatagramPacket receivePack=new DatagramPacket(new byte[40], 40);
+			sendNSend.setSoTimeout(1000);
+			
+			boolean con=true;
+			int imfirst=0;
+			//Cycle : one time in 1800 ms
+
+			while(con){
+				try{
+
+				sendNRecv.send(serverSendPack);
+				Thread.sleep(800);
+				sendNSend.send(serverSendPack2);
+				sendNSend.receive(receivePack); 
+				
+			String recvPack=new String(receivePack.getData());
+			int header=new Integer(recvPack.substring(0,1));
+			String body=recvPack.substring(1,recvPack.length());
+
+			Log.i("JAXTURN", "받은 메시지 헤더 " + header);
+			
+			if (header==WaitPlease){
+				Log.i("JAXTURN", "지금은 아니된다. 기다려 달라 : ");
+				
+			}else if (header == BindingErrorRequest) {
+				Log.i("JAXTURN", "맵에 모두 넣음. 내 정보 : "+body);
+				imfirst=1;
+			} else if (header == BindingRequest) {
+
+			} else if (header == BindingResponse) {
+				con=false;
+				// 바인딩 해도 좋습니다. 상대방의 모든 정보를 얻었습니다.
+				// ////////////////////////////////
+				Log.i("JAXTURN",recvPack);
+				
+				String recvData = recvPack.substring(2, recvPack.length());
+				recvData.trim();
+				StringTokenizer st = new StringTokenizer(recvData, ":");
+				Log.i("JAXTURN","Binding oK . :"+recvData);
+				yourAddr = st.nextToken();
+				yourPort1 = new Integer(st.nextToken()).intValue();
+				yourPort2 = new Integer(st.nextToken()).intValue();
+				Log.i("JAXTURN",yourAddr+":"+yourPort1+":"+yourPort2);
+				InetAddress inetYourAddr = InetAddress.getByName(yourAddr);
+
+				// Punching In the HOLL!!!!
+				DatagramPacket punchingPack = strToPack(HolePunching+"Nobody",inetYourAddr, yourPort2);
+				
+				sendNRecv.send(punchingPack);
+				Log.i("JAXTURN","펀칭 : 당신이 나에게 보낼 주소와 포트."+inetYourAddr+":"+yourPort2);
+				Log.i("JAXTURN","펀칭 : 내가 보내는 패킷의 목적지와 포트."+inetYourAddr+":"+yourPort1);
+				// Ready. PLZ get the Port
+				sendNRecv.send(strToPack(DeleteMyInfo+packIsLive(md5NID,32)+packIsLive(myID,16),inetServerAddr,serverPort));
+				if(imfirst==1){
+					sendNRecv.send(strToPack(SharedSecretRequest+packIsLive(md5NID,32)+packIsLive(myID,16),inetServerAddr,serverPort));
+				}
+				Log.i("JAXTURN","작업완료");
+			} else if (header == SharedSecretError) {
+
+			} else if (header == SharedSecretRequest) {
+
+			} else if (header == SharedSecretResponse) {
+
+			}
+			
+			
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				Log.i("JaxTurn",e.toString());
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				Log.i("JaxTurn",e.toString());
+
+			} catch(Exception e){
+				Log.i("JaxTurn",e.toString());
+
+			}
+	
+			}
+
+			
+			
+			} catch(Exception e){
+				Log.i("JAXTURN", e.toString());
+			}finally{
+				Log.i("JAXTURN","While문 끝남");
+				
+				//와일문이 끝나고 마무리 작업.
+
+				sendNRecv.close();
+				sendNSend.close();
+
+			}
+	
+			
+}
+}
