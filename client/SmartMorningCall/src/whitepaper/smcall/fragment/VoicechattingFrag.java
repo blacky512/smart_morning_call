@@ -1,5 +1,6 @@
 package whitepaper.smcall.fragment;
 
+import java.net.SocketException;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -7,6 +8,7 @@ import whitepaper.smcall.AlarmReceiverActivity;
 import whitepaper.smcall.R;
 import whitepaper.smcall.alarm.AlarmStr;
 import whitepaper.smcall.remote.MatchInfo;
+import whitepaper.smcall.voicechat.JaxTurnClients;
 import whitepaper.smcall.voicechat.Voicechat;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -69,6 +71,8 @@ public class VoicechattingFrag extends DialogFragment {
 	private RelativeLayout		layBtn1;
 	private RelativeLayout		layBtn2;
 	private RelativeLayout		layBtn3;
+	
+	private JaxTurnClients jtc;
 	
 	
 
@@ -215,6 +219,19 @@ public class VoicechattingFrag extends DialogFragment {
 		};
 		
 		timer = new Timer(true);
+
+		
+		
+		
+		///
+		
+		
+		
+		
+		
+		
+	//////////	
+		
 		vc = new Voicechat(MatchInfo.match_private_Ip, MatchInfo.match_private_port, mainHandler);
 		
 		
@@ -227,8 +244,17 @@ public class VoicechattingFrag extends DialogFragment {
 		//vc.SendMicAudio();
 		
 		if(MatchInfo.available){
+			/*
 			vc.RecvAudio();
-			vc.SendMicAudio();
+			vc.SendMicAudio();*/
+			
+
+			try {
+				networking();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}else{
 			vc_info.setText("모닝콜 상대가 없습니다. ㅠㅠ");
@@ -247,6 +273,41 @@ public class VoicechattingFrag extends DialogFragment {
 		
 		
 	}
+	
+
+
+	public void networking() throws InterruptedException{
+		jtc=new JaxTurnClients("211.189.127.205",7771,7772);
+		Thread thrd = new Thread(new Runnable() {
+			public void run(){
+				try {
+					jtc.jaxOcket(AlarmStr.id, MatchInfo.matchKey);//MatchInfo.matchKey);
+
+				} catch (SocketException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				vc.RecvAudio();
+				vc.SendMicAudio(jtc.getNATInetAddr(),jtc.getNATHeardPort());
+			}
+		});
+		thrd.start();
+		//thrd.join();
+		Log.i("JAXTURN","jaxOcket 끝남.");
+
+		
+		/*
+		//SendMicAudio(jtc.getNATInetAddr(),jtc.getNATHeardPort());
+		try {
+			
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+
+	}	
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {

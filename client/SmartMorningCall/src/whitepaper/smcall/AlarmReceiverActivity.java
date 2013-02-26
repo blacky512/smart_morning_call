@@ -134,14 +134,12 @@ public class AlarmReceiverActivity extends FragmentActivity {
 						MatchInfo.match_private_Ip 	= jax.getValue(ret, "ip_virtual");
 						MatchInfo.available 		= true;
 						
-						//@ 상대 아이디, 성별 받기
-						/*
-						 * MatchInfo.opposite_id	= jax.getValue(ret, "");
-						 * MatchInfo.opposite_sex	= jax.getValue(ret, "");
-						 * 
-						 * @ voicecallfrag 성별 구분 업데이트
-						 * @ pollfrag 상대 아이디 적어서 결과 전송
-						 */
+						MatchInfo.matchKey			= jax.getValue(ret, "secret");
+						
+						
+						MatchInfo.opposite_id	= jax.getValue(ret, "sb_id");
+						MatchInfo.opposite_sex	= jax.getValue(ret, "sb_sex");
+					
 						
 						// 연결처리
 						Message retmsg = Message.obtain(mainHandler, 0);			
@@ -205,9 +203,7 @@ public class AlarmReceiverActivity extends FragmentActivity {
 			// TODO Auto-generated method stub
 			switch (v.getId()){
 			case R.id.stopAlarm:
-			{
-				
-			}
+			
 				vibrator.cancel();	
 				
 				flowChecker.cancel();

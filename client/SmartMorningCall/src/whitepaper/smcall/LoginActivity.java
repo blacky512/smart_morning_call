@@ -1,5 +1,24 @@
 package whitepaper.smcall;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.cookie.Cookie;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpParams;
+
 import whitepaper.smcall.alarm.AlarmStr;
 import whitepaper.smcall.db.SmcallDB;
 import whitepaper.smcall.fragment.JoinFrag;
@@ -15,9 +34,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -35,7 +57,11 @@ public class LoginActivity extends FragmentActivity {
 	private Jax			jax;
 	
 	public	Typeface	face;
-
+	
+	public HttpClient httpclient =  new DefaultHttpClient();  //멤버변수로 선언
+	public CookieManager cookieManager;
+	public String domain = Mjpage.MJ;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -47,7 +73,69 @@ public class LoginActivity extends FragmentActivity {
 		
 		view_init();
 		init();		
+		
+		
+		CookieSyncManager.createInstance(this);
+        cookieManager = CookieManager.getInstance();
+        CookieSyncManager.getInstance().startSync();
+        
+        setSyncCookie();
+        
+        
 	}
+	
+	public void setSyncCookie() {
+        Log.e("surosuro", "token transfer start ---------------------------");
+        try {
+            List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+            nameValuePairs.add(new BasicNameValuePair("token", "TEST"));// 넘길 파라메터 값셋팅token=TEST
+                
+            HttpParams params = new BasicHttpParams();
+            
+            HttpPost post = new HttpPost("domain+/androidToken.jsp");
+            post.setParams(params);
+            HttpResponse response = null;
+            BasicResponseHandler myHandler = new BasicResponseHandler();
+            String endResult = null;
+
+            try {
+                post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                response = httpclient.execute(post);
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                endResult = myHandler.handleResponse(response);
+            } catch (HttpResponseException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            List<Cookie> cookies = ((DefaultHttpClient)httpclient).getCookieStore().getCookies();
+            
+            if (!cookies.isEmpty()) {
+                for (int i = 0; i < cookies.size(); i++) {
+                    // cookie = cookies.get(i);
+                    String cookieString = cookies.get(i).getName() + "="
+                            + cookies.get(i).getValue();
+                    Log.e("surosuro", cookieString);
+                    cookieManager.setCookie(domain, cookieString);
+                }
+            }
+            Thread.sleep(500);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 	
 	private void view_init(){
 		editText_id	= (EditText)findViewById(R.id.etId);

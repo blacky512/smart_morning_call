@@ -73,7 +73,7 @@ public class RecordFrag extends Fragment{
 		arr.add("1월 1일 1시 1분 ?");
 				
 		
-		ArrayAdapter<String> aa = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, arr);
+		ArrayAdapter<String> aa = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, arr);
 		
 		listView.setAdapter(aa);
 		

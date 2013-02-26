@@ -60,7 +60,8 @@ public class RandomCallFrg extends Fragment {
 	
 	private SmcallDB	scDB;	
 	
-	private ImageButton[] btn_days = new ImageButton[8];	
+	private Button[] btn_days = new Button[8];
+	private Button	 btnalarmtype;
 
 	//private Button btn_setTime;
 	
@@ -86,19 +87,22 @@ public class RandomCallFrg extends Fragment {
 		mView = inflater.inflate(R.layout.randomcall_frag, null, false);
 		face = Typeface.createFromAsset(getActivity().getAssets(), "font/08SEOULNAMSANL.TTF");
 		
-		btn_days[0] = (ImageButton)mView.findViewById(R.id.btn_mon);
-		btn_days[1] = (ImageButton)mView.findViewById(R.id.btn_tue);
-		btn_days[2] = (ImageButton)mView.findViewById(R.id.btn_wed);
-		btn_days[3] = (ImageButton)mView.findViewById(R.id.btn_thu);
-		btn_days[4] = (ImageButton)mView.findViewById(R.id.btn_fri);
-		btn_days[5] = (ImageButton)mView.findViewById(R.id.btn_sat);
-		btn_days[6] = (ImageButton)mView.findViewById(R.id.btn_sun);
-		btn_days[7] = (ImageButton)mView.findViewById(R.id.btn_set);
+		
+		btn_days[0] = (Button)mView.findViewById(R.id.btnmon);
+		btn_days[1] = (Button)mView.findViewById(R.id.btntue);
+		btn_days[2] = (Button)mView.findViewById(R.id.btnwed);
+		btn_days[3] = (Button)mView.findViewById(R.id.btnthu);
+		btn_days[4] = (Button)mView.findViewById(R.id.btnfri);
+		btn_days[5] = (Button)mView.findViewById(R.id.btnsat);
+		btn_days[6] = (Button)mView.findViewById(R.id.btnsun);
+		btn_days[7] = (Button)mView.findViewById(R.id.btnset);
+		
 		
 		for(int i=0; i<8; i++){
 			btn_days[i].setOnClickListener(onClickListener);
 		}
-				
+		
+		btnalarmtype = (Button)mView.findViewById(R.id.btnalarmtype);
 
 		// TODO Auto-generated method stub
 		return mView;
@@ -158,12 +162,12 @@ public class RandomCallFrg extends Fragment {
 	private void viewInit(){
 		
 		
-		tv2 = (TextView) mView.findViewById(R.id.rd_t1repet);
-		tv2.setTypeface(face);
-		tv4 = (TextView) mView.findViewById(R.id.rd_t2type);
-		tv4.setTypeface(face);
-		tv5 = (TextView) mView.findViewById(R.id.rd_t3set);
-		tv5.setTypeface(face);
+		//tv2 = (TextView) mView.findViewById(R.id.rd_t1repet);
+		//tv2.setTypeface(face);
+		//tv4 = (TextView) mView.findViewById(R.id.rd_t2type);
+		//tv4.setTypeface(face);
+		//tv5 = (TextView) mView.findViewById(R.id.rd_t3set);
+		//tv5.setTypeface(face);
 
 		//btn_setTime	= (Button) mView.findViewById(R.id.btn_settime);
 		//btn_setTime	.setOnClickListener(onClickListener);
@@ -227,14 +231,14 @@ public class RandomCallFrg extends Fragment {
 				break;
 				
 				
-			case R.id.btn_mon:
-			case R.id.btn_tue:
-			case R.id.btn_wed:
-			case R.id.btn_thu:
-			case R.id.btn_fri:
-			case R.id.btn_sat:
-			case R.id.btn_sun:
-			case R.id.btn_set:
+			case R.id.btnmon:
+			case R.id.btntue:
+			case R.id.btnwed:
+			case R.id.btnthu:
+			case R.id.btnfri:
+			case R.id.btnsat:
+			case R.id.btnsun:
+			case R.id.btnset:
 				ft = getFragmentManager()
 				.beginTransaction();				
 				newFragment = new DaySelect();

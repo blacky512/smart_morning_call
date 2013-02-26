@@ -21,21 +21,19 @@ import android.util.Log;
 public class Voicechat {
 	
 	
-	
-	
     static final String LOG_TAG = "UdpStream";
-    static String	HOST = "";
-    static int AUDIO_PORT = 7771;
+   // static String	HOST = "";
+    //static int AUDIO_PORT = 7771;
     static final int SAMPLE_RATE = 8000;
-    static final int SAMPLE_INTERVAL = 20; // milliseconds
-    static final int SAMPLE_SIZE = 2; // bytes per sample
+    static final int SAMPLE_INTERVAL = 20; 	// milliseconds
+    static final int SAMPLE_SIZE = 2; 		// bytes per sample
     static final int BUF_SIZE = SAMPLE_INTERVAL*SAMPLE_INTERVAL*SAMPLE_SIZE*2;
     
     private Handler mainHandler;
     
     public Voicechat(String Host, int port, Handler mainHandler){
-    	HOST = Host;
-    	AUDIO_PORT = port;
+    	//HOST = Host;
+    	//AUDIO_PORT = port;
     	this.mainHandler = mainHandler;
     }
     
@@ -46,8 +44,8 @@ public class Voicechat {
     		sendThread.kill();
     	}
     }
-	public void SendMicAudio() {
-		sendThread = new SendThread();
+	public void SendMicAudio(InetAddress ia, int port) {
+		sendThread = new SendThread(ia, port);
 		sendThread.setDaemon(true);
 		sendThread.start();	
 	}
@@ -55,10 +53,19 @@ public class Voicechat {
     	boolean available = true;
     	AudioRecord audio_recorder;
     	
+    	InetAddress m_ia;
+    	int			m_port;
+    	
+    	public SendThread(InetAddress ia, int port){
+    		m_ia = ia;
+    		m_port = port;
+    	}
+    	
     	@Override
     	public void run() {
     		// TODO Auto-generated method stub
     		super.run();
+    		
     		Log.e(LOG_TAG, "start SendMicAudio thread, thread id: "
 					+ Thread.currentThread().getId());
 					
@@ -73,14 +80,15 @@ public class Voicechat {
 			int bytes_count = 0;
 			byte[] buf = new byte[BUF_SIZE];
 			try {					
-				InetAddress addr = InetAddress.getByName(HOST);
-				DatagramSocket sock = new DatagramSocket();					
+				//InetAddress addr = InetAddress.getByName(HOST);
+				DatagramSocket sock = new DatagramSocket(7772);					
 			
 				audio_recorder.startRecording();
 				while (available) {
 					bytes_read = audio_recorder.read(buf, 0, BUF_SIZE);
 					DatagramPacket pack = new DatagramPacket(buf,
-							bytes_read, addr, AUDIO_PORT);
+							bytes_read, m_ia, m_port);
+					
 					sock.send(pack);
 					bytes_count += bytes_read;
 					Log.d(LOG_TAG, "bytes_count : " + bytes_count);
@@ -143,6 +151,10 @@ public class Voicechat {
 			// TODO Auto-generated method stub
 			super.run();
 			
+			
+			
+			
+			
 			Log.e(LOG_TAG, "start recv thread, thread id: "
                     + Thread.currentThread().getId());
                 track = new AudioTrack(AudioManager.STREAM_VOICE_CALL, 
@@ -152,7 +164,7 @@ public class Voicechat {
                 track.play();
                 try
                 {
-                    sock = new DatagramSocket(AUDIO_PORT);
+                    sock = new DatagramSocket(7771);
                     byte[] buf = new byte[BUF_SIZE];
 
                     boolean firstRecv = true;
